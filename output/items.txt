@@ -1,0 +1,2 @@
+B3000;Binford (US);Power 3000 Bohrmaschine;299.9;
+X5901;XRay (DE);Night Vision 5000;1450.5;
