@@ -9,10 +9,10 @@ import java.util.Scanner;
 
 public class Item {
 
-    private String sku;
-    private String brand;
-    private String name;
-    private double ppu;
+    protected String sku;
+    protected String brand;
+    protected String name;
+    protected double ppu;
 
 
     public Item(String sku, String brand, String name, double ppu) {
@@ -21,11 +21,12 @@ public class Item {
         this.name = name;
         this.ppu = ppu;
     }
+
     // empty constructor to create instance of Item
     public Item() {
     }
 
-    private int defIterator(){
+    int defIterator() {
 
         Scanner scanner = new Scanner(System.in);
         System.out.println();
@@ -36,55 +37,30 @@ public class Item {
     }
 
 
-    private Item itemCreator(Path path, List<Item> itemsList) throws IOException {
+    public Item itemCreator(Path path, List<Item> itemsList) throws IOException {
 
-            Scanner scanner = new Scanner(System.in);
-            System.out.println();
-            System.out.println("Bitte die Daten des Items eingeben!");
-            System.out.println("SKU: ");
-            sku = scanner.nextLine();
-            System.out.println("Brand: ");
-            brand = scanner.nextLine();
-            System.out.println("Name:" );
-            name = scanner.nextLine();
-            System.out.println("Price per Unit: ");
-            ppu = scanner.nextDouble();
-            System.out.println("Alle Daten zu diesem Item erfasst!");
-            System.out.println();
-            Item item = new Item(sku, brand, name, ppu);
-            itemsList.add(item);
-            item.writeToFile(path);
-            System.out.println("Items in Datei "+path+" geschrieben!");
-            System.out.println();
+        Scanner scanner = new Scanner(System.in);
+        System.out.println();
+        System.out.println("Bitte die Daten des Items eingeben!");
+        System.out.println("SKU: ");
+        setSku(scanner.nextLine());
+        System.out.println("Brand: ");
+        setBrand(scanner.nextLine());
+        System.out.println("Name:");
+        setName(scanner.nextLine());
+        System.out.println("Price per Unit: ");
+        setPpu(scanner.nextDouble());
+        System.out.println("Alle Daten zu diesem Item erfasst!");
+        System.out.println();
+        Item item = new Item(getSku(),getBrand(), getName(), getPpu());
+        itemsList.add(item);
+        item.writeToFile(path);
+        System.out.println("Items in Datei " + path + " geschrieben!");
+        System.out.println();
         return item;
     }
 
-    public static void main(String[] args) throws IOException {
 
-        List<Item> inputList = new ArrayList<>();
-        List<Item> itemsFile = new ArrayList<>();
-//        Files.createFile(Path.of("output\\items.txt"));       HOW DOES IT WORK?
-        Path path = Paths.get("output\\items.txt");
-        if (Files.notExists(path)) {
-            Files.createFile(path);
-        }
-        Item item = new Item();
-        int units= item.defIterator();
-        for ( int i=0;i<units;i++){
-            item.itemCreator(path, inputList);
-        }
-        for ( int i=0;i<units;i++){
-            System.out.println(inputList.get(i).getSku());
-            System.out.println(inputList.get(i).getBrand());
-            System.out.println(inputList.get(i).getName());
-            System.out.println(inputList.get(i).getPpu());
-            System.out.println();
-        }
-
-
-
-
-    }
 
     // AUX
     private String convert() {
@@ -112,9 +88,6 @@ public class Item {
                 object.getBytes(),
                 StandardOpenOption.APPEND);
     }
-
-
-
 
 
     // G& S
