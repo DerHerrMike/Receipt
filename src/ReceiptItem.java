@@ -25,7 +25,7 @@ public class ReceiptItem {
                 "Gesamtbetrag inkl USt.: "+getGross();
     }
 
-    private double getGross(){
+    double getGross(){
         return getQuantity()*getPrice();
     }
 

@@ -36,8 +36,6 @@ public class Item {
         return units;
     }
 
-
-
     public Item itemCreator(Path path, List<Item> itemsList) throws IOException {
 
         Scanner scanner = new Scanner(System.in);
@@ -53,14 +51,13 @@ public class Item {
         setPpu(scanner.nextDouble());
         System.out.println("Alle Daten zu diesem Item erfasst!");
         System.out.println();
-        Item item = new Item(getSku(),getBrand(), getName(), getPpu());
+        Item item = new Item(getSku(), getBrand(), getName(), getPpu());
         itemsList.add(item);
         item.writeToFile(path);
         System.out.println("Items in Datei " + path + " geschrieben!");
         System.out.println();
         return item;
     }
-
 
 
     // AUX
