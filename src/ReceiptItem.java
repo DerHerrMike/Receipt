@@ -11,7 +11,11 @@ public class ReceiptItem {
         this.quantity = quantity;
         this.price = price;
     }
+    //empty constructor
 
+
+    public ReceiptItem() {
+    }
 
     public String stringify() {
         return "Produkt: " + getItem() + System.getProperty("line.separator") +
@@ -21,26 +25,9 @@ public class ReceiptItem {
                 "Gesamtbetrag inkl USt.: "+getGross();
     }
 
-
     private double getGross(){
         return getQuantity()*getPrice();
-
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
     // G & S

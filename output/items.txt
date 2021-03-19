@@ -1,7 +1,10 @@
 B3000;Binford (US);Power 3000 Bohrmaschine;299.9;
 X5901;XRay (DE);Night Vision 5000;1450.5;
-rrrqw;reqq;qqwe eqe;34.0;
-oiuu;kluuzzo;ozo z;6776.0;
 XR5004;Black & Decker;Power Bohrer 4000;299.9;
-qeqweqw;qweqweq;qweeqw;33.0;
-uiouio;uouio;uouio;99.0;
+KX6HU;Phillips;Shaver 4000;34.9;
+OLK3Y;Klarna;UPay;100.0;
+KX78Z;L'Oreal;Anti-Aging Q5;12.9;
+KLP;MICROSOFT;Windows;100.0;
+XCV;DISNEY;Goofy;34.0;
+UIL;DISNEY;Donald DUck;50.9;
+TZU;APPLE;iMac;2002.0;

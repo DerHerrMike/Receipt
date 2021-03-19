@@ -9,7 +9,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class Receipt {
 
     protected LocalDateTime timestamp;
-    protected String shopname;
+    public String shopname;
     protected int receiptNumber;
     protected static AtomicInteger atomicInteger = new AtomicInteger(0);
 
