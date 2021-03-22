@@ -5,9 +5,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -16,17 +14,9 @@ import java.util.Scanner;
 
 public class Driver {
 
-    private static int numberOfItemsPurchased;
-
-    public Driver() {
-    }
-
-    Driver driver = new Driver();
-
     public static void main(String[] args) throws IOException {
 
         Item itemBlank = new Item();
-
         Scanner scanner = new Scanner(System.in);
 //      Files.createFile(Path.of("output\\items.txt"));       HOW DOES IT WORK?
         Path path = Paths.get("output\\items.txt");
@@ -57,8 +47,8 @@ public class Driver {
                 }
             }
             case 2: {
-                displayItemsOnStorage(inputList);
 
+                displayItemsOnStorage(inputList);
                 System.out.println("Zurück zur Auswahl mit 1, Programm beenden mit beliebiger Taste: ");
                 if (scanner.nextLine().equals("1")) {
                     userSelect();
@@ -71,13 +61,11 @@ public class Driver {
             case 3: {
 
                 List<ReceiptItem> returned = shopping(inputList, shopname);
-                numberOfItemsPurchased = returned.size();
-                createReceipt(returned, shopname, numberOfItemsPurchased);
-
+                createReceipt(returned, shopname, returned.size());
             }
             break;
             default:
-                throw new IllegalStateException("Unexpected value: " + userSelect());
+                throw new IllegalStateException("Bitte gültigen Wert eingeben! Was wollen Sie tun: " + userSelect());
         }
     }
 
@@ -101,13 +89,12 @@ public class Driver {
         }
         System.out.println("______________________________");
         System.out.println("______________________________" + System.getProperty("line.separator") +
-                "Total inkl. USt.: " +  Math.round(total * 100.0) / 100.0 + " EUR.");
+                "Total inkl. USt.: " + Math.round(total * 100.0) / 100.0 + " EUR.");
     }
 
 
     private static List<ReceiptItem> shopping(List<Item> inputList, String shopname) {
 
-        ReceiptItem item4ShoppingList = new ReceiptItem();
         List<ReceiptItem> shoppingList = new ArrayList<>();
         Scanner scanner = new Scanner(System.in);
         System.out.println();
@@ -139,8 +126,8 @@ public class Driver {
             int anzahl = scanner.nextInt();
             scanner.nextLine();
             int skuPosition = iterationCounter;
-            item4ShoppingList.setItem(inputList.get(skuPosition).getBrand() + ", " + inputList.get(skuPosition).getName());
-            item4ShoppingList.setPrice(inputList.get(skuPosition).getPpu());
+//            item4ShoppingList.setItem(inputList.get(skuPosition).getBrand() + ", " + inputList.get(skuPosition).getName());
+//            item4ShoppingList.setPrice(inputList.get(skuPosition).getPpu());
             String selectedItemBrandName = inputList.get(skuPosition).getBrand() + ", " + inputList.get(skuPosition).getName();
             double selectedItemPrice = inputList.get(skuPosition).getPpu();
             System.out.println();
