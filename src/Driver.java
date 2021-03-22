@@ -16,6 +16,13 @@ import java.util.Scanner;
 
 public class Driver {
 
+    private static int numberOfItemsPurchased;
+
+    public Driver() {
+    }
+
+    Driver driver = new Driver();
+
     public static void main(String[] args) throws IOException {
 
         Item itemBlank = new Item();
@@ -64,8 +71,7 @@ public class Driver {
             case 3: {
 
                 List<ReceiptItem> returned = shopping(inputList, shopname);
-                int numberOfItemsPurchased = returned.size();
-                System.out.println("numberOfItemsPurchased = " + numberOfItemsPurchased + " vor aufruf createREceipt");
+                numberOfItemsPurchased = returned.size();
                 createReceipt(returned, shopname, numberOfItemsPurchased);
 
             }
@@ -84,15 +90,18 @@ public class Driver {
         String rConvert = r.stringify();
         System.out.println(rConvert);
         System.out.println();
+        double total = 0;
 
         for (int i = 0; i < numberOfItemsPurchased; i++) {
             ReceiptItem pos = new ReceiptItem(shoppingList.get(position).getItem(), shoppingList.get(position).getQuantity(), shoppingList.get(position).getPrice());
+            total += pos.getGross();
             String porConvert = pos.stringify();
             System.out.println(porConvert);
             position++;
         }
-
-        System.out.println("Ende");
+        System.out.println("______________________________");
+        System.out.println("______________________________" + System.getProperty("line.separator") +
+                "Total inkl. USt.: " +  Math.round(total * 100.0) / 100.0 + " EUR.");
     }
 
 
@@ -134,8 +143,6 @@ public class Driver {
             item4ShoppingList.setPrice(inputList.get(skuPosition).getPpu());
             String selectedItemBrandName = inputList.get(skuPosition).getBrand() + ", " + inputList.get(skuPosition).getName();
             double selectedItemPrice = inputList.get(skuPosition).getPpu();
-//        item4ShoppingList.setItem(selectedItemBrandName);
-//        item4ShoppingList.setPrice(selectedItemPrice);
             System.out.println();
             ReceiptItem bought = new ReceiptItem(selectedItemBrandName, anzahl, selectedItemPrice);
             shoppingList.add(bought);           //for one item test
@@ -145,95 +152,94 @@ public class Driver {
                 abbruch = true;
             }
         }
-        System.out.println(shoppingList.size());
         return shoppingList;
     }
 
-        private static void displayItemsOnStorage (List < Item > inputList) {
+    private static void displayItemsOnStorage(List<Item> inputList) {
 
-            System.out.println("Items auf Lager: ");
+        System.out.println("Items auf Lager: ");
+        System.out.println();
+
+        for (Item item : inputList) {
+            System.out.print("SKU: " + item.getSku() + " || ");
+            System.out.print("Brand: " + item.getBrand() + " || ");
+            System.out.print("Name: " + item.getName() + " || ");
+            System.out.println("Stückpreis EUR: " + item.getPpu());
             System.out.println();
-
-            for (Item item : inputList) {
-                System.out.print("SKU: " + item.getSku() + " || ");
-                System.out.print("Brand: " + item.getBrand() + " || ");
-                System.out.print("Name: " + item.getName() + " || ");
-                System.out.println("Stückpreis EUR: " + item.getPpu());
-                System.out.println();
-            }
-            System.out.println("Alle Items auf Lager ausgegeben.");
         }
-
-        private static int userSelect () {
-
-            Scanner scanner = new Scanner(System.in);
-            System.out.println();
-            System.out.println("Was möchtest du tun?");
-            System.out.println();
-            System.out.println("1 für hinzufügen von Items ins Lager, 2 um Items auf Lager abzufragen, 3 um Items zu kaufen, 0 um Programm zu beenden: ");
-            String auswahlU = scanner.nextLine();
-            int auswahl = Integer.parseInt(auswahlU);
-            if (auswahlU.equals("0")) {
-                System.out.println("--- Programm wird beendet ---");
-                System.exit(0);
-            } else
-
-                System.out.println();
-            return auswahl;
-        }
-
-        public static List<Item> readAllLines (Path path) throws IOException {
-
-            BufferedReader reader;
-            List<Item> itemsExFile = new ArrayList<>();
-
-            if (Files.size(path) < 1) {
-                System.out.println("Kein Eintrag in Datei!");
-                return null;
-            } else {
-
-                try {
-                    reader = new BufferedReader(new FileReader(String.valueOf(path)));
-                    String line = reader.readLine();
-                    while (line != null) {
-                        String[] ausgeleseneZeile = line.split(";");
-                        //SKU
-                        String skuF = ausgeleseneZeile[0];
-                        //BRAND
-                        String brandF = ausgeleseneZeile[1];
-                        //NAME
-                        String nameF = ausgeleseneZeile[2];
-                        //PPU
-                        double ppuF = Double.parseDouble(ausgeleseneZeile[3]);
-                        Item objectExFile = new Item(skuF, brandF, nameF, ppuF);
-                        itemsExFile.add(objectExFile);
-                        line = reader.readLine();
-                    }
-                    reader.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-            return itemsExFile;
-        }
-
-        // AUX
-        private String convert () {
-            return ";";
-        }
-
-        public void writeToFile (Path path) throws IOException {
-
-            String object = convert();
-
-            if (Files.notExists(path)) {
-                Files.createFile(path);
-            }
-
-            Files.write(
-                    path,
-                    object.getBytes(),
-                    StandardOpenOption.APPEND);
-        }
-
+        System.out.println("Alle Items auf Lager ausgegeben.");
     }
+
+    private static int userSelect() {
+
+        Scanner scanner = new Scanner(System.in);
+        System.out.println();
+        System.out.println("Was möchtest du tun?");
+        System.out.println();
+        System.out.println("1 für hinzufügen von Items ins Lager, 2 um Items auf Lager abzufragen, 3 um Items zu kaufen, 0 um Programm zu beenden: ");
+        String auswahlU = scanner.nextLine();
+        int auswahl = Integer.parseInt(auswahlU);
+        if (auswahlU.equals("0")) {
+            System.out.println("--- Programm wird beendet ---");
+            System.exit(0);
+        } else
+
+            System.out.println();
+        return auswahl;
+    }
+
+    public static List<Item> readAllLines(Path path) throws IOException {
+
+        BufferedReader reader;
+        List<Item> itemsExFile = new ArrayList<>();
+
+        if (Files.size(path) < 1) {
+            System.out.println("Kein Eintrag in Datei!");
+            return null;
+        } else {
+
+            try {
+                reader = new BufferedReader(new FileReader(String.valueOf(path)));
+                String line = reader.readLine();
+                while (line != null) {
+                    String[] ausgeleseneZeile = line.split(";");
+                    //SKU
+                    String skuF = ausgeleseneZeile[0];
+                    //BRAND
+                    String brandF = ausgeleseneZeile[1];
+                    //NAME
+                    String nameF = ausgeleseneZeile[2];
+                    //PPU
+                    double ppuF = Double.parseDouble(ausgeleseneZeile[3]);
+                    Item objectExFile = new Item(skuF, brandF, nameF, ppuF);
+                    itemsExFile.add(objectExFile);
+                    line = reader.readLine();
+                }
+                reader.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return itemsExFile;
+    }
+
+    // AUX
+    private String convert() {
+        return ";";
+    }
+
+    public void writeToFile(Path path) throws IOException {
+
+        String object = convert();
+
+        if (Files.notExists(path)) {
+            Files.createFile(path);
+        }
+
+        Files.write(
+                path,
+                object.getBytes(),
+                StandardOpenOption.APPEND);
+    }
+
+}

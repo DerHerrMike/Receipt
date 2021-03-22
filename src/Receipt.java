@@ -37,13 +37,11 @@ public class Receipt {
     }
 
     public String stringify() {
-        return "Einkauf am/um: " + getTimestamp() + System.getProperty("line.separator") +
-                getShopname() + " - Ihr Partner im Handwerk!" + System.getProperty("line.separator") +
-                "Rechnungsnummer 2021000" + getReceiptNumber() + ", UID Nr. GB8904321";
-    }
-
-    private void addToList() {
-
+        return System.getProperty("line.separator") + getShopname() + " - Ihr Partner im Handwerk!" +
+                System.getProperty("line.separator") + "Einkauf am/um: " + getTimestamp() +
+                System.getProperty("line.separator") +
+                System.getProperty("line.separator") +
+                "Rechnungsnummer " + getReceiptNumber() + ", UID Nr. GB8904321";
     }
 
     public String getTimestamp() {

@@ -12,23 +12,20 @@ public class ReceiptItem {
         this.price = price;
     }
     //empty constructor
-
-
     public ReceiptItem() {
     }
 
     public String stringify() {
         return "Produkt: " + getItem() + System.getProperty("line.separator") +
-                "Stück: "+ getQuantity() + System.getProperty("line.separator") +
+                "Stück: " + getQuantity() + System.getProperty("line.separator") +
                 "Preis pro Stück: " + getPrice() + System.getProperty("line.separator") +
-                "----------------------------"+System.getProperty("line.separator") +
-                "Gesamtbetrag inkl USt.: "+getGross();
+                "------------------------------" + System.getProperty("line.separator") +
+                "Gesamtbetrag Produkt: " + Math.round(getGross() * 100.0) / 100.0 + System.getProperty("line.separator");
     }
 
-    double getGross(){
-        return getQuantity()*getPrice();
+    public double getGross() {
+        return getQuantity() * getPrice();
     }
-
 
     // G & S
     public String getItem() {
