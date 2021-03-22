@@ -17,9 +17,9 @@ import java.util.Scanner;
 public class Driver {
 
     public static void main(String[] args) throws IOException {
-        ReceiptItem riblank = new ReceiptItem();
+
         Item itemBlank = new Item();
-        LocalDateTime lcd = LocalDateTime.now();
+
         Scanner scanner = new Scanner(System.in);
 //      Files.createFile(Path.of("output\\items.txt"));       HOW DOES IT WORK?
         Path path = Paths.get("output\\items.txt");
@@ -62,16 +62,12 @@ public class Driver {
                 }
             }
             case 3: {
-                ReceiptItem item4ShoppingList = new ReceiptItem();
-                shopping(inputList, shopname, item4ShoppingList);
-                Receipt r = new Receipt(lcd, shopname, 1);
-//                ReceiptItem pos1 = new ReceiptItem(item4ShoppingList.getItem(), item4ShoppingList.getQuantity(), item4ShoppingList.getGross());
-                String rConvert = r.stringify();
-                String porConvert = item4ShoppingList.stringify();
-                System.out.println(rConvert);
-                System.out.println();
-                System.out.println(porConvert);
-                System.out.println("Ende");
+
+                List <ReceiptItem> returned = shopping(inputList, shopname);
+                int numberOfItemsPurchased = returned.size();
+                System.out.println("numberOfItemsPurchased = "+ numberOfItemsPurchased+" vor aufruf createREceipt");
+                createReceipt(returned, shopname, numberOfItemsPurchased);
+
             }
             break;
             default:
@@ -79,23 +75,30 @@ public class Driver {
         }
     }
 
+    private static void createReceipt(List<ReceiptItem> shoppingList, String shopname, int numberOfItemsPurchased) {
 
-    private static void displayItemsOnStorage(List<Item> inputList) {
-
-        System.out.println("Items auf Lager: ");
+        LocalDateTime lcd = LocalDateTime.now();
+        int receiptPositionCounter = 1;
+        int position = 0;
+        Receipt r = new Receipt(lcd, shopname, receiptPositionCounter);
+        String rConvert = r.stringify();
+        System.out.println(rConvert);
         System.out.println();
 
-        for (Item item : inputList) {
-            System.out.print("SKU: " + item.getSku() + " || ");
-            System.out.print("Brand: " + item.getBrand() + " || ");
-            System.out.print("Name: " + item.getName() + " || ");
-            System.out.println("Stückpreis EUR: " + item.getPpu());
-            System.out.println();
+        for (int i = 0; i < numberOfItemsPurchased; i++){
+            ReceiptItem pos = new ReceiptItem(shoppingList.get(position).getItem(), shoppingList.get(position).getQuantity(), shoppingList.get(position).getPrice());
+            String porConvert = pos.stringify();
+            System.out.println(porConvert);
+            position++;
         }
-        System.out.println("Alle Items auf Lager ausgegeben.");
+
+        System.out.println("Ende");
     }
 
-    private static List<ReceiptItem> shopping(List<Item> inputList, String shopname, ReceiptItem item4ShoppingList) {
+
+
+    private static List<ReceiptItem> shopping(List<Item> inputList, String shopname) {
+
 
         List<ReceiptItem> shoppingList = new ArrayList<>();
         Scanner scanner = new Scanner(System.in);
@@ -118,21 +121,49 @@ public class Driver {
             String compareSKU = inputList.get(iterationCounter).getSku();
             if (!compareSKU.equalsIgnoreCase(selectedSKU)) {
                 iterationCounter++;
-            } else break;
+            }
         }
+        ReceiptItem item4ShoppingList = new ReceiptItem();
+        System.out.println();
+        System.out.println("Bitte gewünschte Anzahl eingeben: ");
+        int anzhal = scanner.nextInt();
+        scanner.nextLine();
+
+//        item4ShoppingList.setQuantity(scanner.nextInt());
+//
         int skuPosition = iterationCounter;
+        item4ShoppingList.setItem(inputList.get(skuPosition).getBrand() + ", " + inputList.get(skuPosition).getName());
+        item4ShoppingList.setPrice(inputList.get(skuPosition).getPpu());
         String selectedItemBrandName = inputList.get(skuPosition).getBrand() + ", " + inputList.get(skuPosition).getName();
         double selectedItemPrice = inputList.get(skuPosition).getPpu();
         item4ShoppingList.setItem(selectedItemBrandName);
         item4ShoppingList.setPrice(selectedItemPrice);
         System.out.println();
-        System.out.println("Bitte gewünschte Anzahl eingeben: ");
-        item4ShoppingList.setQuantity(scanner.nextInt());
-        scanner.nextLine();
-        System.out.println();
+        ReceiptItem bought = new ReceiptItem(selectedItemBrandName, anzhal, selectedItemPrice);
         shoppingList.add(item4ShoppingList);           //for one item test
+        System.out.println("Weiteres Produkt kaufen? (j/n): ");
+        String furtherItems = scanner.nextLine();
+        if (furtherItems.equalsIgnoreCase("j")) {
+            shopping(inputList, shopname);
+        }
+        System.out.println(shoppingList.size());
         return shoppingList;
 //        shoppingItem.getSku() = itemsOnReceipt.setSKU
+    }
+
+    private static void displayItemsOnStorage(List<Item> inputList) {
+
+        System.out.println("Items auf Lager: ");
+        System.out.println();
+
+        for (Item item : inputList) {
+            System.out.print("SKU: " + item.getSku() + " || ");
+            System.out.print("Brand: " + item.getBrand() + " || ");
+            System.out.print("Name: " + item.getName() + " || ");
+            System.out.println("Stückpreis EUR: " + item.getPpu());
+            System.out.println();
+        }
+        System.out.println("Alle Items auf Lager ausgegeben.");
     }
 
     private static int userSelect() {
