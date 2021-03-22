@@ -14,8 +14,6 @@ import java.util.Objects;
 import java.util.Scanner;
 
 
-// TODO read items from list so that more items can be printed on receipts, create shopping, finish to part one end.
-
 public class Driver {
 
     public static void main(String[] args) throws IOException {
@@ -64,20 +62,24 @@ public class Driver {
                 }
             }
             case 3: {
-                shopping(inputList, shopname);
+                ReceiptItem item4ShoppingList = new ReceiptItem();
+                shopping(inputList, shopname, item4ShoppingList);
                 Receipt r = new Receipt(lcd, shopname, 1);
-                ReceiptItem pos1 = new ReceiptItem(riblank.getItem(), riblank.getQuantity(), riblank.getGross());
+                ReceiptItem pos1 = new ReceiptItem(item4ShoppingList.getItem(), item4ShoppingList.getQuantity(), item4ShoppingList.getGross());
                 String rConvert = r.stringify();
                 // TODO lines below give Null, check why. add more than one purchase case.
-
-                String porConvert = pos1.stringify();
+                String porConvert = item4ShoppingList.stringify();
                 System.out.println(rConvert);
                 System.out.println();
                 System.out.println(porConvert);
                 System.out.println("Ende");
             }
+            break;
+            default:
+                throw new IllegalStateException("Unexpected value: " + userSelect());
         }
     }
+
 
     private static void displayItemsOnStorage(List<Item> inputList) {
 
@@ -94,10 +96,9 @@ public class Driver {
         System.out.println("Alle Items auf Lager ausgegeben.");
     }
 
-    private static void shopping(List<Item> inputList, String shopname) {
+    private static List<ReceiptItem> shopping(List<Item> inputList, String shopname, ReceiptItem item4ShoppingList) {
 
-        Item shoppingItem = new Item();
-        ReceiptItem itemsOnReceipt = new ReceiptItem();
+        List<ReceiptItem> shoppingList = new ArrayList<>();
         Scanner scanner = new Scanner(System.in);
         System.out.println();
         System.out.println("Willkommen bei " + shopname + " - Tools4Pros");
@@ -123,14 +124,15 @@ public class Driver {
         int skuPosition = iterationCounter + 1;
         String selectedItemBrandName = inputList.get(skuPosition).getBrand() + ", " + inputList.get(skuPosition).getName();
         double selectedItemPrice = inputList.get(skuPosition).getPpu();
-        itemsOnReceipt.setItem(selectedItemBrandName);
-        itemsOnReceipt.setPrice(selectedItemPrice);
+        item4ShoppingList.setItem(selectedItemBrandName);
+        item4ShoppingList.setPrice(selectedItemPrice);
         System.out.println();
         System.out.println("Bitte gewünschte Anzahl eingeben: ");
-        itemsOnReceipt.setQuantity(scanner.nextInt());
+        item4ShoppingList.setQuantity(scanner.nextInt());
         scanner.nextLine();
         System.out.println();
-
+        shoppingList.add(item4ShoppingList);           //for one item test
+        return shoppingList;
 //        shoppingItem.getSku() = itemsOnReceipt.setSKU
     }
 
