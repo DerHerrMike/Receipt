@@ -14,8 +14,11 @@ import java.util.Scanner;
 
 public class Driver {
 
+
+
     public static void main(String[] args) throws IOException {
 
+        List<Receipt> listOfReceipts = new ArrayList<>();
         Item itemBlank = new Item();
         Scanner scanner = new Scanner(System.in);
 //      Files.createFile(Path.of("output\\items.txt"));       HOW DOES IT WORK?
@@ -60,8 +63,9 @@ public class Driver {
             }
             case 3: {
 
-                List<ReceiptItem> returned = shopping(inputList, shopname);
-                createReceipt(returned, shopname, returned.size());
+                List<ReceiptItem> returned = shopping(inputList, shopname); //takes shoppingList(ItemBrandName, Quantity, ItemPrice
+                Receipt receiptReturned = createReceipt(returned, shopname, returned.size());
+                listOfReceipts.add(receiptReturned);
             }
             break;
             default:
@@ -69,12 +73,12 @@ public class Driver {
         }
     }
 
-    private static void createReceipt(List<ReceiptItem> shoppingList, String shopname, int numberOfItemsPurchased) {
+    private static Receipt createReceipt(List<ReceiptItem> shoppingList, String shopname, int numberOfItemsPurchased) {
 
         LocalDateTime lcd = LocalDateTime.now();
         int receiptPositionCounter = 1;
         int position = 0;
-        Receipt r = new Receipt(lcd, shopname, receiptPositionCounter);
+        Receipt r = new Receipt(lcd, shopname,    receiptPositionCounter);
         String rConvert = r.stringify();
         System.out.println(rConvert);
         System.out.println();
@@ -90,12 +94,14 @@ public class Driver {
         System.out.println("______________________________");
         System.out.println("______________________________" + System.getProperty("line.separator") +
                 "Total inkl. USt.: " + Math.round(total * 100.0) / 100.0 + " EUR.");
+        return r;
     }
 
 
     private static List<ReceiptItem> shopping(List<Item> inputList, String shopname) {
 
         List<ReceiptItem> shoppingList = new ArrayList<>();
+        List<Receipt>receiptList=new ArrayList<>();
         Scanner scanner = new Scanner(System.in);
         System.out.println();
         System.out.println("Willkommen bei " + shopname + " - Tools4Pros");
@@ -115,7 +121,7 @@ public class Driver {
             System.out.println("Welches Produkt möchtest du kaufen? Bitte SKU eingeben: ");
             String selectedSKU = scanner.nextLine();
             int iterationCounter = 0;
-            for (int i = 0; i < inputList.size(); i++) {
+            for (int i = 0; i < inputList.size(); i++) {//gets SKUs
                 String compareSKU = inputList.get(iterationCounter).getSku();
                 if (!compareSKU.equalsIgnoreCase(selectedSKU)) {
                     iterationCounter++;
@@ -126,13 +132,14 @@ public class Driver {
             int anzahl = scanner.nextInt();
             scanner.nextLine();
             int skuPosition = iterationCounter;
-//            item4ShoppingList.setItem(inputList.get(skuPosition).getBrand() + ", " + inputList.get(skuPosition).getName());
-//            item4ShoppingList.setPrice(inputList.get(skuPosition).getPpu());
+            ReceiptItem item4ShoppingList = new ReceiptItem();
+            item4ShoppingList.setItem(inputList.get(skuPosition).getBrand() + ", " + inputList.get(skuPosition).getName());
+            item4ShoppingList.setPrice(inputList.get(skuPosition).getPpu());
             String selectedItemBrandName = inputList.get(skuPosition).getBrand() + ", " + inputList.get(skuPosition).getName();
             double selectedItemPrice = inputList.get(skuPosition).getPpu();
             System.out.println();
             ReceiptItem bought = new ReceiptItem(selectedItemBrandName, anzahl, selectedItemPrice);
-            shoppingList.add(bought);           //for one item test
+            shoppingList.add(bought);
             System.out.println("Weiteres Produkt kaufen? (j/n): ");
             String furtherItems = scanner.nextLine();
             if (furtherItems.equalsIgnoreCase("n")) {

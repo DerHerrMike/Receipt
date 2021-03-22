@@ -1,3 +1,7 @@
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardOpenOption;
 import java.rmi.server.UID;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -13,7 +17,7 @@ public class Receipt {
     protected int receiptNumber;
     protected static AtomicInteger atomicInteger = new AtomicInteger(0);
 
-    ArrayList<ReceiptItem> receiptItemArrayList = new ArrayList<>();
+
 
     // standard constructor
 
@@ -41,7 +45,25 @@ public class Receipt {
                 System.getProperty("line.separator") + "Einkauf am/um: " + getTimestamp() +
                 System.getProperty("line.separator") +
                 System.getProperty("line.separator") +
-                "Rechnungsnummer " + getReceiptNumber() + ", UID Nr. GB8904321";
+                "Rechnungsnummer " + getNextValue() + ", UID Nr. GB8904321";
+    }
+
+    public void writeToFile(Path path) throws IOException {
+
+        String object = convert();
+
+        if (Files.notExists(path)) {
+            Files.createFile(path);
+        }
+
+        Files.write(
+                path,
+                object.getBytes(),
+                StandardOpenOption.APPEND);
+    }
+
+    private String convert() {
+        return ";";
     }
 
     public String getTimestamp() {
