@@ -65,9 +65,8 @@ public class Driver {
                 ReceiptItem item4ShoppingList = new ReceiptItem();
                 shopping(inputList, shopname, item4ShoppingList);
                 Receipt r = new Receipt(lcd, shopname, 1);
-                ReceiptItem pos1 = new ReceiptItem(item4ShoppingList.getItem(), item4ShoppingList.getQuantity(), item4ShoppingList.getGross());
+//                ReceiptItem pos1 = new ReceiptItem(item4ShoppingList.getItem(), item4ShoppingList.getQuantity(), item4ShoppingList.getGross());
                 String rConvert = r.stringify();
-                // TODO lines below give Null, check why. add more than one purchase case.
                 String porConvert = item4ShoppingList.stringify();
                 System.out.println(rConvert);
                 System.out.println();
@@ -121,7 +120,7 @@ public class Driver {
                 iterationCounter++;
             } else break;
         }
-        int skuPosition = iterationCounter + 1;
+        int skuPosition = iterationCounter;
         String selectedItemBrandName = inputList.get(skuPosition).getBrand() + ", " + inputList.get(skuPosition).getName();
         double selectedItemPrice = inputList.get(skuPosition).getPpu();
         item4ShoppingList.setItem(selectedItemBrandName);
