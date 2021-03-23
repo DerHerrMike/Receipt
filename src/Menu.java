@@ -22,7 +22,7 @@ public class Menu {
         System.out.println("PROGRAMM ZU EIN- UND VERKAUF EINES KLEINEN UNTERNEHMENS");
         System.out.println("*******************************************************");
         System.out.println();
-        System.out.println("Bitte den Firmennamen festlegen: ");
+        System.out.println("Bitte zu Beginn den Firmennamen festlegen: ");
     }
 
     public void chooseName() {

@@ -26,27 +26,49 @@ public class Driver {
     public static void main(String[] args) throws IOException {
 
         Scanner scanner = new Scanner(System.in);
+        Shop shop = new Shop();
+        Accounting accounts = new Accounting();
         Item itemBlank = new Item();
         List<Receipt> listOfReceipts = new ArrayList<>();
-//      Files.createFile(Path.of("output\\items.txt"));       HOW DOES IT WORK?
         Path path = Paths.get("output\\items.txt");
         if (Files.notExists(path)) {
             Files.createFile(path);
         }
         List<Item> inputList = new ArrayList<>(Objects.requireNonNull(readAllLines(path)));
-        System.out.println("Bitte Shopname festlegen: ");
-        String shopname = scanner.nextLine();
+
+        shop.designNameSelection();
+        shop.chooseName();
         System.out.println();
-        int userSelected = userSelect();
-        menu(userSelected, itemBlank, path, inputList, shopname, listOfReceipts);
-    }
+        System.out.println();
+        while (true) {
+            System.out.println();
+            System.out.println("WILLKOMMEN BEI " + shop.getShopname());
+            System.out.println("--------------------------------------");
+            System.out.println();
+            System.out.println("Items ins Lager hinzufügen = 1");
+            System.out.println();
+            System.out.println("Items in Lager auflisten = 2");
+            System.out.println();
+            System.out.println("Items verkaufen = 3");
+            System.out.println();
+            System.out.println("Buchhaltung aufrufen = 4");
+            System.out.println();
+            System.out.println("Programm beenden = 9");
+            System.out.println();
+            System.out.println("Bitte Auswahl treffen: ");
+            int auswahl = scanner.nextInt();
+            switch (auswahl) {
+                case 1 -> shop.listItems();
+                case 2 -> shop.addItem(path);
+                case 3 -> shop.sellItems();
+                case 4 -> accounts.accounting();
+                case 9 -> System.out.println("Das Programm wird beendet!");
+            }
+            System.exit(0);
+        }
 
 
-    private static void menu(int userSelect, Item itemBlank, Path path, List<Item> inputList, String shopname, List<Receipt> listOfReceipts) throws IOException {
-
-        Scanner scanner = new Scanner(System.in);
-
-        switch (userSelect) {
+        switch (userSelected) {
             case 1 -> {
 
                 int i = 0;
@@ -193,12 +215,31 @@ public class Driver {
     private static int userSelect() {
 
         Scanner scanner = new Scanner(System.in);
-        System.out.println();
-        System.out.println("Was möchtest du tun?");
-        System.out.println();
-        System.out.println("1 für hinzufügen von Items ins Lager, 2 um Items auf Lager abzufragen, 3 um Items zu kaufen, 4 für Buchhaltung, 0 um Programm zu beenden: ");
-        int auswahl = scanner.nextInt();
-        System.out.println();
+
+        while (true){
+            System.out.println();
+            System.out.println("Kleines Programm zu Ein- und Verkauf");
+            System.out.println("************************************");
+            System.out.println();
+            System.out.println();
+            System.out.println("Items ins Lager hinzufügen = 1");
+            System.out.println();
+            System.out.println("Items in Lager auflisten = 2");
+            System.out.println();
+            System.out.println("Items verkaufen = 3");
+            System.out.println();
+            System.out.println("Buchhaltung aufrufen = 4");
+            System.out.println();
+            System.out.println("Programm beenden = 9");
+            System.out.println();
+            System.out.println("Bitte auswählen: ");
+            int auswahl = scanner.nextInt();
+            switch (auswahl) {
+                case 1: shop
+            }
+        }
+
+
         if (auswahl < 1) {
             System.out.println("--- Programm wird beendet ---");
             System.exit(0);
