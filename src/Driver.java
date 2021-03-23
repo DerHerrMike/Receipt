@@ -53,12 +53,13 @@ public class Driver {
             int auswahl = scanner.nextInt();
             switch (auswahl) {
                 case 1 -> shop.addItem(path,inputListFromFile);
-                case 2 -> shop.listItems(inputListFromFile);
+                case 2 -> shop.displayItems(inputListFromFile);
                 case 3 -> {
-                    shop.sellItems(inputListFromFile);
-                    shop.createReceipt(shop.getNumberOfItems(),shop.sellItems(inputListFromFile));
-                    Receipt returnedReceipt = shop.createReceipt(shop.getNumberOfItems(),shop.sellItems(inputListFromFile));
-                            shop.listOfReceipts.add(returnedReceipt);
+                    List<ReceiptItem> returned = shop.sellItems(inputListFromFile);
+                    int itemsCount = returned.size();
+                    shop.createReceipt(itemsCount,returned);
+                    Receipt returnedReceipt = shop.createReceipt(itemsCount,returned);
+                    shop.printReceipt(returnedReceipt);
                 }
                 case 4 -> accounts.accounting();
                 case 9 -> {
