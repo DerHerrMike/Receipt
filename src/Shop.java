@@ -1,17 +1,21 @@
 import java.io.IOException;
 import java.nio.file.Path;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
 public class Shop {
 
-    private List<Item> items;
+    protected List<Item> items;
+    protected List<Receipt> listOfReceipts;
     protected String shopname;
 
     //constructor
     public Shop(String shopname) {
         this.shopname = shopname;
     }
+
     //no-args constructor
     public Shop() {
     }
@@ -29,13 +33,12 @@ public class Shop {
         setShopname(scanner.nextLine());
     }
 
-    public void addItem(Path path) throws IOException {
+    public void addItem(Path path, List<Item> getItemsFromFile) throws IOException {
 
-        Scanner scanner = new Scanner(System.in);
         Item item = new Item();
         int i = 0;
         while (i < item.defIterator()) {
-            Item insert = item.itemCreator(path, items);
+            Item insert = item.itemCreator(path, getItemsFromFile);
             items.add(insert);
             i++;
             item.writeToFile(path);
@@ -44,15 +47,110 @@ public class Shop {
         System.out.println();
     }
 
+    public void listItems(List<Item> getItemsFromFile) {
 
+        System.out.println("--------------------------------");
+        System.out.println();
+        System.out.println("Items auf Lager: ");
+        System.out.println();
 
-
-    public void listItems(){
-
+        for (Item item : getItemsFromFile) {
+            System.out.print("SKU: " + item.getSku() + " || ");
+            System.out.print("Brand: " + item.getBrand() + " || ");
+            System.out.print("Name: " + item.getName() + " || ");
+            System.out.println("Stückpreis EUR: " + item.getPpu());
+            System.out.println();
+        }
+        System.out.println("Alle Items auf Lager ausgegeben.");
     }
 
-    public void sellItems(){
+    public List<ReceiptItem> sellItems(List<Item> getItemsFromFile ) {
 
+        List<ReceiptItem> receiptItemList = new ArrayList<>();
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.println();
+        System.out.println("Willkommen bei " + shopname + " - Tools4Pros");
+        System.out.println();
+        System.out.println("Folgende Produkte sind aktuell verfügbar:");
+        System.out.println();
+        for (Item item : getItemsFromFile) {
+            System.out.print("SKU: " + item.getSku() + " || ");
+            System.out.print("Brand: " + item.getBrand() + " || ");
+            System.out.print("Name: " + item.getName() + " || ");
+            System.out.println("Stückpreis EUR: " + item.getPpu());
+            System.out.println();
+        }
+
+        boolean abbruch = false;
+        while (!abbruch) {
+            System.out.println("Welches Produkt möchtest du kaufen? Bitte SKU eingeben: ");
+            String selectedSKU = scanner.nextLine();
+            int iterationCounter = 0;
+            for (int i = 0; i < getItemsFromFile.size(); i++) {//gets SKUs
+                String compareSKU = getItemsFromFile.get(iterationCounter).getSku();
+                if (!compareSKU.equalsIgnoreCase(selectedSKU)) {
+                    iterationCounter++;
+                }
+            }
+            int anzahl = getNumberOfItems();
+            int skuPosition = iterationCounter;
+            ReceiptItem itemsOnListItems = new ReceiptItem();
+            itemsOnListItems.setItem(getItemsFromFile.get(skuPosition).getBrand() + ", " +getItemsFromFile.get(skuPosition).getName());
+            itemsOnListItems.setPrice(getItemsFromFile.get(skuPosition).getPpu());
+            String selectedItemBrandName = (getItemsFromFile.get(skuPosition).getBrand() + ", " + getItemsFromFile.get(skuPosition).getName());
+            double selectedItemPrice = getItemsFromFile.get(skuPosition).getPpu();
+            ReceiptItem bought = new ReceiptItem(selectedItemBrandName, anzahl, selectedItemPrice);
+            receiptItemList.add(bought);
+            System.out.println();
+            System.out.println("Weiteres Produkt kaufen? (j/n): ");
+            String furtherItems = scanner.nextLine();
+            if (furtherItems.equalsIgnoreCase("n")) {
+                abbruch = true;
+            }
+        }
+        int anzahl;
+        return receiptItemList;
+    }
+
+
+    public int getNumberOfItems() {
+        Scanner scanner = new Scanner(System.in);
+        System.out.println();
+        System.out.println("Bitte gewünschte Anzahl eingeben: ");
+        return scanner.nextInt();
+    }
+
+    public Receipt createReceipt(int numberOfItemsPurchased, List<ReceiptItem> itemsOnList) {
+
+        Receipt r = new Receipt();
+        LocalDateTime lcd = LocalDateTime.now();
+        Receipt receipt = new Receipt(lcd, getShopname(), r.getNextValue());
+        String receiptConverter = receipt.stringify();
+        System.out.println(receiptConverter);
+        System.out.println();
+        double total = 0;
+        int position = 0;
+        for (int i = 0; i < numberOfItemsPurchased; i++) {
+            ReceiptItem itemsOnReceipt = new ReceiptItem(itemsOnList.get(position).getItem(), itemsOnList.get(position).getQuantity(), itemsOnList.get(position).getPrice());
+            total += itemsOnReceipt.getGross();
+            String porConvert = itemsOnReceipt.stringify();
+            System.out.println(porConvert);
+            position++;
+        }
+
+        System.out.println("______________________________");
+        System.out.println("______________________________" + System.getProperty("line.separator") +
+                "Total inkl. USt.: " + Math.round(total * 100.0) / 100.0 + " EUR.");
+        return receipt;
+
+        //NEEDED for Accounting:
+        //                System.out.println("Auslesen des return Objektes receipt aus createReceipt:");
+        //                System.out.println(listOfReceipts.get(0).stringify());
+        //                System.out.println();
+        //                System.out.println(returned.get(0).stringify());
+        //                System.out.println(returned.get(1).stringify());
+        //                System.out.println(returned.get(2).stringify());//create loop
     }
 
 
@@ -65,11 +163,5 @@ public class Shop {
         this.shopname = shopname;
     }
 
-    public List<Item> getItems() {
-        return items;
-    }
 
-    public void setItems(List<Item> items) {
-        this.items = items;
-    }
 }

@@ -36,7 +36,7 @@ public class Item {
         return units;
     }
 
-    public Item itemCreator(Path path, List<Item> storageList) throws IOException {
+    public Item itemCreator (Path path, List<Item> itemsList) throws IOException {
 
         Shop shop = new Shop();
         Scanner scanner = new Scanner(System.in);
@@ -53,6 +53,7 @@ public class Item {
         System.out.println("Alle Daten zu diesem Item erfasst!");
         System.out.println();
         Item item = new Item(getSku(), getBrand(), getName(), getPpu());
+        itemsList.add(item);
         System.out.println();
         return item;
     }
