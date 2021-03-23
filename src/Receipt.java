@@ -14,7 +14,7 @@ public class Receipt {
 
     protected LocalDateTime timestamp;
     public String shopname;
-    protected int receiptNumber;
+    protected int receiptNumber = 0;
     protected static AtomicInteger atomicInteger = new AtomicInteger(0);
 
 

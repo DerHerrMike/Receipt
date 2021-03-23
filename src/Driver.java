@@ -14,13 +14,20 @@ import java.util.Scanner;
 
 public class Driver {
 
+    private static int counter;
 
+    public Driver() {
+    }
+
+    public static int getCounter() {
+        return counter;
+    }
 
     public static void main(String[] args) throws IOException {
 
-        List<Receipt> listOfReceipts = new ArrayList<>();
-        Item itemBlank = new Item();
         Scanner scanner = new Scanner(System.in);
+        Item itemBlank = new Item();
+        List<Receipt> listOfReceipts = new ArrayList<>();
 //      Files.createFile(Path.of("output\\items.txt"));       HOW DOES IT WORK?
         Path path = Paths.get("output\\items.txt");
         if (Files.notExists(path)) {
@@ -30,13 +37,22 @@ public class Driver {
         System.out.println("Bitte Shopname festlegen: ");
         String shopname = scanner.nextLine();
         System.out.println();
-        switch (userSelect()) {
+        int userSelected = userSelect();
+        menu(userSelected, itemBlank, path, inputList, shopname, listOfReceipts);
+    }
 
-            case 1: {
 
-                int units = itemBlank.defIterator();
-                for (int i = 0; i < units; i++) {
+    private static void menu(int userSelect, Item itemBlank, Path path, List<Item> inputList, String shopname, List<Receipt> listOfReceipts) throws IOException {
+
+        Scanner scanner = new Scanner(System.in);
+
+        switch (userSelect) {
+            case 1 -> {
+
+                int i = 0;
+                while (i < itemBlank.defIterator()) {
                     itemBlank.itemCreator(path, inputList);
+                    i++;
                 }
                 System.out.println("Alle Items hinzugefügt!");
                 System.out.println();
@@ -46,10 +62,9 @@ public class Driver {
                 } else {
                     System.out.println("--- Programm wird beendet ---");
                     System.exit(0);
-                    break;
                 }
             }
-            case 2: {
+            case 2 -> {
 
                 displayItemsOnStorage(inputList);
                 System.out.println("Zurück zur Auswahl mit 1, Programm beenden mit beliebiger Taste: ");
@@ -58,27 +73,39 @@ public class Driver {
                 } else {
                     System.out.println("--- Programm wird beendet ---");
                     System.exit(0);
-                    break;
                 }
             }
-            case 3: {
+            case 3 -> {
 
                 List<ReceiptItem> returned = shopping(inputList, shopname); //takes shoppingList(ItemBrandName, Quantity, ItemPrice
                 Receipt receiptReturned = createReceipt(returned, shopname, returned.size());
                 listOfReceipts.add(receiptReturned);
+                System.out.println("Zurück zur Auswahl mit 1, Programm beenden mit beliebiger Taste: ");
+                if (scanner.nextLine().equals("1")) {
+                    userSelect();
+                } else {
+                    System.out.println("--- Programm wird beendet ---");
+                    System.exit(0);
+                }
+                //NEEDED for Accounting:
+                //                System.out.println("Auslesen des return Objektes receipt aus createReceipt:");
+                //                System.out.println(listOfReceipts.get(0).stringify());
+                //                System.out.println();
+                //                System.out.println(returned.get(0).stringify());
+                //                System.out.println(returned.get(1).stringify());
+                //                System.out.println(returned.get(2).stringify());//create loop
             }
-            break;
-            default:
-                throw new IllegalStateException("Bitte gültigen Wert eingeben! Was wollen Sie tun: " + userSelect());
+            default -> throw new IllegalStateException("Bitte gültigen Wert eingeben! Was wollen Sie tun: " + userSelect());
         }
     }
+
 
     private static Receipt createReceipt(List<ReceiptItem> shoppingList, String shopname, int numberOfItemsPurchased) {
 
         LocalDateTime lcd = LocalDateTime.now();
-        int receiptPositionCounter = 1;
+        int receiptPositionCounter = (getCounter() + 1);
         int position = 0;
-        Receipt r = new Receipt(lcd, shopname,    receiptPositionCounter);
+        Receipt r = new Receipt(lcd, shopname, receiptPositionCounter);
         String rConvert = r.stringify();
         System.out.println(rConvert);
         System.out.println();
@@ -101,7 +128,6 @@ public class Driver {
     private static List<ReceiptItem> shopping(List<Item> inputList, String shopname) {
 
         List<ReceiptItem> shoppingList = new ArrayList<>();
-        List<Receipt>receiptList=new ArrayList<>();
         Scanner scanner = new Scanner(System.in);
         System.out.println();
         System.out.println("Willkommen bei " + shopname + " - Tools4Pros");
@@ -170,70 +196,70 @@ public class Driver {
         System.out.println();
         System.out.println("Was möchtest du tun?");
         System.out.println();
-        System.out.println("1 für hinzufügen von Items ins Lager, 2 um Items auf Lager abzufragen, 3 um Items zu kaufen, 0 um Programm zu beenden: ");
-        String auswahlU = scanner.nextLine();
-        int auswahl = Integer.parseInt(auswahlU);
-        if (auswahlU.equals("0")) {
+        System.out.println("1 für hinzufügen von Items ins Lager, 2 um Items auf Lager abzufragen, 3 um Items zu kaufen, 4 für Buchhaltung, 0 um Programm zu beenden: ");
+        int auswahl = scanner.nextInt();
+        System.out.println();
+        if (auswahl < 1) {
             System.out.println("--- Programm wird beendet ---");
             System.exit(0);
-        } else
 
-            System.out.println();
-        return auswahl;
+        }return auswahl;
     }
 
-    public static List<Item> readAllLines(Path path) throws IOException {
 
-        BufferedReader reader;
-        List<Item> itemsExFile = new ArrayList<>();
 
-        if (Files.size(path) < 1) {
-            System.out.println("Kein Eintrag in Datei!");
-            return null;
-        } else {
+        public static List<Item> readAllLines (Path path) throws IOException {
 
-            try {
-                reader = new BufferedReader(new FileReader(String.valueOf(path)));
-                String line = reader.readLine();
-                while (line != null) {
-                    String[] ausgeleseneZeile = line.split(";");
-                    //SKU
-                    String skuF = ausgeleseneZeile[0];
-                    //BRAND
-                    String brandF = ausgeleseneZeile[1];
-                    //NAME
-                    String nameF = ausgeleseneZeile[2];
-                    //PPU
-                    double ppuF = Double.parseDouble(ausgeleseneZeile[3]);
-                    Item objectExFile = new Item(skuF, brandF, nameF, ppuF);
-                    itemsExFile.add(objectExFile);
-                    line = reader.readLine();
+            BufferedReader reader;
+            List<Item> itemsExFile = new ArrayList<>();
+
+            if (Files.size(path) < 1) {
+                System.out.println("Kein Eintrag in Datei!");
+                return null;
+            } else {
+
+                try {
+                    reader = new BufferedReader(new FileReader(String.valueOf(path)));
+                    String line = reader.readLine();
+                    while (line != null) {
+                        String[] ausgeleseneZeile = line.split(";");
+                        //SKU
+                        String skuF = ausgeleseneZeile[0];
+                        //BRAND
+                        String brandF = ausgeleseneZeile[1];
+                        //NAME
+                        String nameF = ausgeleseneZeile[2];
+                        //PPU
+                        double ppuF = Double.parseDouble(ausgeleseneZeile[3]);
+                        Item objectExFile = new Item(skuF, brandF, nameF, ppuF);
+                        itemsExFile.add(objectExFile);
+                        line = reader.readLine();
+                    }
+                    reader.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
                 }
-                reader.close();
-            } catch (IOException e) {
-                e.printStackTrace();
             }
-        }
-        return itemsExFile;
-    }
-
-    // AUX
-    private String convert() {
-        return ";";
-    }
-
-    public void writeToFile(Path path) throws IOException {
-
-        String object = convert();
-
-        if (Files.notExists(path)) {
-            Files.createFile(path);
+            return itemsExFile;
         }
 
-        Files.write(
-                path,
-                object.getBytes(),
-                StandardOpenOption.APPEND);
-    }
+        // AUX
+        private String convert () {
+            return ";";
+        }
 
-}
+        public void writeToFile (Path path) throws IOException {
+
+            String object = convert();
+
+            if (Files.notExists(path)) {
+                Files.createFile(path);
+            }
+
+            Files.write(
+                    path,
+                    object.getBytes(),
+                    StandardOpenOption.APPEND);
+        }
+
+    }

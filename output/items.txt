@@ -10,3 +10,6 @@ UIL;DISNEY;Donald DUck;50.9;
 TZU;APPLE;iMac;2002.0;
 KLO9;Black & Decker;Power Bohrer 5000;299.9;
 rft;ree;xdff;23.0;
+JKU;Echad;Enlightenment Now;100.0;
+IKL;LernTech;Neuro Enhancer;29.9;
+UZT;Samsung;Tablet Master;399.9;
