@@ -14,7 +14,7 @@ import java.util.Scanner;
 
 public class Driver {
 
-    private static int counter;
+    private static int counter;     //sollte man anders lösen
 
     public Driver() {
     }
@@ -202,8 +202,8 @@ public class Driver {
         if (auswahl < 1) {
             System.out.println("--- Programm wird beendet ---");
             System.exit(0);
-
-        }return auswahl;
+        }
+        return auswahl;
     }
 
 
