@@ -41,9 +41,9 @@ public class Receipt {
     }
 
     public String stringify() {
-        return System.getProperty("line.separator") + getShopname() + " - Ihr Partner im Handwerk!" +
+        Shop shop = new Shop();
+        return System.getProperty("line.separator") + shop.getShopname() + " - Ihr Partner im Handwerk!" +
                 System.getProperty("line.separator") + "Einkauf am/um: " + getTimestamp() +
-                System.getProperty("line.separator") +
                 System.getProperty("line.separator") +
                 "Rechnungsnummer " + getNextValue() + ", UID Nr. GB8904321";
     }

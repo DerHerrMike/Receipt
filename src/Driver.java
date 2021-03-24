@@ -36,7 +36,7 @@ public class Driver {
 
         while (true) {
             System.out.println();
-            System.out.println("WILLKOMMEN BEI " + shop.getShopname());
+            System.out.println("WILLKOMMEN BEI " + shop.getShopname()+ " - Tools4Pros");
             System.out.println("--------------------------------------");
             System.out.println();
             System.out.println("Items ins Lager hinzufügen = 1");
@@ -51,16 +51,21 @@ public class Driver {
             System.out.println();
             System.out.println("Bitte Auswahl treffen: ");
             int auswahl = scanner.nextInt();
+            scanner.nextLine();
             switch (auswahl) {
-                case 1 -> shop.addItem(path,inputListFromFile);
+                case 1 -> shop.addItem(path, inputListFromFile);
                 case 2 -> shop.displayItems(inputListFromFile);
                 case 3 -> {
-                    List<ReceiptItem> returned = shop.sellItems(inputListFromFile);
-                    int itemsCount = returned.size();
-                    shop.createReceipt(itemsCount,returned);
-                    Receipt returnedReceipt = shop.createReceipt(itemsCount,returned);
-                    shop.printReceipt(returnedReceipt);
+                    List<ReceiptItem> receiptItemListReturned = shop.sellItems(inputListFromFile);
+                    int numberOfItems = 0;
+                    for (int i = 0; i < receiptItemListReturned.size(); i++) {
+                        numberOfItems += receiptItemListReturned.get(i).quantity;
+                    }
+                    double total = shop.getReceiptItemsTotal(numberOfItems, receiptItemListReturned);
+                    Receipt receipt = shop.createReceipt();
+                    shop.printReceipt(receipt, receiptItemListReturned, total);
                 }
+
                 case 4 -> accounts.accounting();
                 case 9 -> {
                     System.out.println("Das Programm wird beendet!");
@@ -72,6 +77,13 @@ public class Driver {
     }
 
 
+    //                case 3 -> {
+//                    List<ReceiptItem> returned = shop.sellItems(inputListFromFile);
+//                    int itemsCount = returned.size();
+//                    shop.createReceipt(itemsCount,returned);
+//                    Receipt returnedReceipt = shop.createReceipt(itemsCount,returned);
+//                    shop.printReceipt(returnedReceipt);
+//                }
 
     // AUX
     private String convert() {

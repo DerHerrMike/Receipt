@@ -13,3 +13,4 @@ rft;ree;xdff;23.0;
 JKU;Echad;Enlightenment Now;100.0;
 IKL;LernTech;Neuro Enhancer;29.9;
 UZT;Samsung;Tablet Master;399.9;
+cvb;OSHO;Danger: Truth at Work;29.9;

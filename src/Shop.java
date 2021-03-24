@@ -12,9 +12,7 @@ public class Shop {
     protected String shopname;
 
     //constructor
-    public Shop(String shopname) {
-        this.shopname = shopname;
-    }
+
 
     //no-args constructor
     public Shop() {
@@ -30,8 +28,10 @@ public class Shop {
     public void chooseName() {
 
         Scanner scanner = new Scanner(System.in);
-        setShopname(scanner.nextLine());
+        String nameshop = scanner.nextLine();
+        setShopname(nameshop);
     }
+
 
     public void addItem(Path path, List<Item> getItemsFromFile) throws IOException {
 
@@ -39,12 +39,16 @@ public class Shop {
         int i = 0;
         while (i < item.defIterator()) {
             Item insert = item.itemCreator(path, getItemsFromFile);
-            items.add(insert);
-            i++;
+            getItemsFromFile.add(insert);
             item.writeToFile(path);
+            i++;
         }
         System.out.println("Alle Items hinzugefügt und in Datei geschrieben!");
         System.out.println();
+        System.out.println();
+        System.out.println("Zurück zum Menü mit beliebiger Taste!");
+        Scanner scanner = new Scanner(System.in);
+        scanner.nextLine();
     }
 
     public void displayItems(List<Item> getItemsFromFile) {
@@ -62,9 +66,14 @@ public class Shop {
             System.out.println();
         }
         System.out.println("Alle Items auf Lager ausgegeben.");
+        System.out.println();
+        System.out.println();
+        System.out.println("Zurück zum Menü mit beliebiger Taste!");
+        Scanner scanner = new Scanner(System.in);
+        scanner.nextLine();
     }
 
-    public List<ReceiptItem> sellItems(List<Item> getItemsFromFile ) {
+    public List<ReceiptItem> sellItems(List<Item> getItemsFromFile) {
 
         Scanner scanner = new Scanner(System.in);
         List<ReceiptItem> receiptItemList = new ArrayList<>();
@@ -92,10 +101,13 @@ public class Shop {
                     iterationCounter++;
                 }
             }
-            int anzahl = getNumberOfItems();
+            System.out.println();
+            System.out.println("Bitte gewünschte Anzahl eingeben: ");
+            int anzahl = scanner.nextInt();
+            scanner.nextLine();
             int skuPosition = iterationCounter;
             ReceiptItem itemsOnListItems = new ReceiptItem();
-            itemsOnListItems.setItem(getItemsFromFile.get(skuPosition).getBrand() + ", " +getItemsFromFile.get(skuPosition).getName());
+            itemsOnListItems.setItem(getItemsFromFile.get(skuPosition).getBrand() + ", " + getItemsFromFile.get(skuPosition).getName());
             itemsOnListItems.setPrice(getItemsFromFile.get(skuPosition).getPpu());
             String selectedItemBrandName = (getItemsFromFile.get(skuPosition).getBrand() + ", " + getItemsFromFile.get(skuPosition).getName());
             double selectedItemPrice = getItemsFromFile.get(skuPosition).getPpu();
@@ -113,40 +125,65 @@ public class Shop {
     }
 
 
-    public int getNumberOfItems() {
-        Scanner scanner = new Scanner(System.in);
-        System.out.println();
-        System.out.println("Bitte gewünschte Anzahl eingeben: ");
-        return scanner.nextInt();
-    }
+//    public int setNumberOfItems() {
+//        Scanner scanner = new Scanner(System.in);
+//        System.out.println();
+//        System.out.println("Bitte gewünschte Anzahl eingeben: ");
+//        return scanner.nextInt();
+//    }
 
-    public Receipt createReceipt(int numberOfItemsPurchased, List<ReceiptItem> listForReceipt) {
+    public Receipt createReceipt() {
 
         Receipt r = new Receipt();
         LocalDateTime lcd = LocalDateTime.now();
-        Receipt receipt = new Receipt(lcd, getShopname(), r.getNextValue());
+        return new Receipt(lcd, shopname, r.getNextValue());
+    }
+//
+//    public void addReceiptItemsToList(int numberOfItemsPurchased, List<ReceiptItem> listForReceipt) {
+//
+//        double total = 0;
+//        int position = 0;
+//        for (int i = 0; i < numberOfItemsPurchased; i++) {
+//            ReceiptItem itemsOnReceipt = new ReceiptItem(listForReceipt.get(position).getItem(), listForReceipt.get(position).getQuantity(), listForReceipt.get(position).getPrice());
+//            listForReceipt.add(itemsOnReceipt);
+//            position++;
+//        }
+//    }
+
+    public double getReceiptItemsTotal(int numberOfItemsPurchased, List<ReceiptItem> listForReceipt) {
+
+        double total = 0;
+        int i = 0;
+        while (i < listForReceipt.size()) {
+            total += listForReceipt.get(i).getGross();
+
+//            ReceiptItem itemsOnReceipt = new ReceiptItem(listForReceipt.get(position).getItem(), listForReceipt.get(position).getQuantity(), listForReceipt.get(position).getPrice());
+//            total += itemsOnReceipt.getGross();
+//            position++;
+            i++;
+        }
+        return total;
+    }
+
+
+    public void printReceipt(Receipt receipt, List<ReceiptItem> listOfItemsForReceipt, double total) {
+
+        Scanner scanner = new Scanner(System.in);
         String receiptConverter = receipt.stringify();
         System.out.println(receiptConverter);
         System.out.println();
-        double total = 0;
-        int position = 0;
-        for (int i = 0; i < numberOfItemsPurchased; i++) {
-            ReceiptItem itemsOnReceipt = new ReceiptItem(listOfItemsForReceipt.get(position).getItem(), listOfItemsForReceipt.get(position).getQuantity(), listOfItemsForReceipt.get(position).getPrice());
-            total += itemsOnReceipt.getGross();
-            String porConvert = itemsOnReceipt.stringify();
-            System.out.println(porConvert);
-            position++;
-        }
+        for (int i = 0; i < listOfItemsForReceipt.size(); i++) {
 
+            String returnForSringify = listOfItemsForReceipt.get(i).stringify();
+            System.out.println(returnForSringify);
+        }
         System.out.println("______________________________");
         System.out.println("______________________________" + System.getProperty("line.separator") +
                 "Total inkl. USt.: " + Math.round(total * 100.0) / 100.0 + " EUR.");
-        return receipt;
-    }
-
-    public void printReceipt(Receipt listOfItemsForReceipt){
-
-
+        System.out.println();
+        System.out.println();
+        System.out.println("Zurück zum Menü mit beliebiger Taste!");
+        scanner.nextLine();
     }
 
     //NEEDED for Accounting:
@@ -165,6 +202,4 @@ public class Shop {
     public void setShopname(String shopname) {
         this.shopname = shopname;
     }
-
-
 }
