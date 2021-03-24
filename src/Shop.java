@@ -7,11 +7,7 @@ import java.util.Scanner;
 
 public class Shop {
 
-    protected List<Item> items;
-    protected List<ReceiptItem> listOfItemsForReceipt;
     protected String shopname;
-
-    //constructor
 
 
     //no-args constructor
@@ -150,7 +146,7 @@ public class Shop {
 //        }
 //    }
 
-    public double getReceiptItemsTotal(int numberOfItemsPurchased, List<ReceiptItem> listForReceipt) {
+    public double getReceiptItemsTotal( List<ReceiptItem> listForReceipt) {
 
         double total = 0;
         int i = 0;
@@ -172,9 +168,9 @@ public class Shop {
         String receiptConverter = receipt.stringify();
         System.out.println(receiptConverter);
         System.out.println();
-        for (int i = 0; i < listOfItemsForReceipt.size(); i++) {
+        for (ReceiptItem item : listOfItemsForReceipt) {
 
-            String returnForSringify = listOfItemsForReceipt.get(i).stringify();
+            String returnForSringify = item.stringify();
             System.out.println(returnForSringify);
         }
         System.out.println("______________________________");

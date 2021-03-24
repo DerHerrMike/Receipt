@@ -1,9 +1,7 @@
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
@@ -38,7 +36,6 @@ public class Item {
 
     public Item itemCreator (Path path, List<Item> itemsList) throws IOException {
 
-        Shop shop = new Shop();
         Scanner scanner = new Scanner(System.in);
         System.out.println();
         System.out.println("Bitte die Daten des Items eingeben!");
@@ -54,6 +51,7 @@ public class Item {
         System.out.println();
         Item item = new Item(getSku(), getBrand(), getName(), getPpu());
         itemsList.add(item);
+        item.writeToFile(path);
         System.out.println();
         return item;
     }

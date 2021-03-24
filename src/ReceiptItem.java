@@ -1,4 +1,4 @@
-import java.rmi.server.UID;
+
 
 public class ReceiptItem {
 
@@ -38,10 +38,6 @@ public class ReceiptItem {
 
     public int getQuantity() {
         return quantity;
-    }
-
-    public void setQuantity(int quantity) {
-        this.quantity = quantity;
     }
 
     public double getPrice() {

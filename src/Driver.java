@@ -58,10 +58,10 @@ public class Driver {
                 case 3 -> {
                     List<ReceiptItem> receiptItemListReturned = shop.sellItems(inputListFromFile);
                     int numberOfItems = 0;
-                    for (int i = 0; i < receiptItemListReturned.size(); i++) {
-                        numberOfItems += receiptItemListReturned.get(i).quantity;
+                    for (ReceiptItem item : receiptItemListReturned) {
+                        numberOfItems += item.quantity;
                     }
-                    double total = shop.getReceiptItemsTotal(numberOfItems, receiptItemListReturned);
+                    double total = shop.getReceiptItemsTotal(receiptItemListReturned);
                     Receipt receipt = shop.createReceipt();
                     shop.printReceipt(receipt, receiptItemListReturned, total);
                 }
