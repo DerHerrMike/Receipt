@@ -51,7 +51,7 @@ public class Item {
         System.out.println();
         Item item = new Item(getSku(), getBrand(), getName(), getPpu());
         itemsList.add(item);
-        item.writeToFile(path);
+        writeToFile(path);
         System.out.println();
         return item;
     }

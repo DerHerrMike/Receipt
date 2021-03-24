@@ -21,6 +21,7 @@ public class Driver {
     public static void main(String[] args) throws IOException {
 
         Scanner scanner = new Scanner(System.in);
+        Driver driver = new Driver();
         Shop shop = new Shop();
         Accounting accounts = new Accounting();
         Path path = Paths.get("output\\items.txt");
@@ -36,7 +37,7 @@ public class Driver {
 
         while (true) {
             System.out.println();
-            System.out.println("WILLKOMMEN BEI " + shop.getShopname()+ " - Tools4Pros");
+            System.out.println("WILLKOMMEN BEI " + shop.getShopname() + " - Tools4Pros");
             System.out.println("--------------------------------------");
             System.out.println();
             System.out.println("Items ins Lager hinzufügen = 1");
@@ -76,14 +77,6 @@ public class Driver {
         }
     }
 
-
-    //                case 3 -> {
-//                    List<ReceiptItem> returned = shop.sellItems(inputListFromFile);
-//                    int itemsCount = returned.size();
-//                    shop.createReceipt(itemsCount,returned);
-//                    Receipt returnedReceipt = shop.createReceipt(itemsCount,returned);
-//                    shop.printReceipt(returnedReceipt);
-//                }
 
     // AUX
     private String convert() {
