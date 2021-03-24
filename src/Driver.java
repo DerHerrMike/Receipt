@@ -58,6 +58,7 @@ public class Driver {
                 case 2 -> shop.displayItems(inputListFromFile);
                 case 3 -> {
                     List<ReceiptItem> receiptItemListReturned = shop.sellItems(inputListFromFile);
+                    driver.readoutItem(receiptItemListReturned);
                     int numberOfItems = 0;
                     for (ReceiptItem item : receiptItemListReturned) {
                         numberOfItems += item.quantity;
@@ -75,6 +76,16 @@ public class Driver {
                 default -> throw new IllegalStateException("Unexpected value: " + auswahl);
             }
         }
+    }
+
+    public void readoutItem(List<ReceiptItem> receiptItemListReturn) {
+
+        System.out.println("Auslesen des return Objektes receipt aus createReceipt:");
+        for (ReceiptItem item : receiptItemListReturn) {
+            System.out.println(item.stringify());
+            System.out.println();
+        }
+        System.out.println("Auslesen ENde");
     }
 
 

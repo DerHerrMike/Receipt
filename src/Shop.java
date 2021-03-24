@@ -102,8 +102,8 @@ public class Shop {
                 String compareSKU = getItemsFromFile.get(iterationCounter).getSku();
                 if (!compareSKU.equalsIgnoreCase(selectedSKU)) {
                     iterationCounter++;
-                }else{
-                   details4Accounting.add(selectedSKU);
+                } else {
+                    details4Accounting.add(selectedSKU);
                 }
             }
             System.out.println();
@@ -124,9 +124,9 @@ public class Shop {
             System.out.println("Weiteres Produkt kaufen? (j/n): ");
             String furtherItems = scanner.nextLine();
             if (furtherItems.equalsIgnoreCase("n")) {
-                int purchaseCount = (getPurchaseCounter()+1);
+                int purchaseCount = (getPurchaseCounter() + 1);
                 setPurchaseCounter(purchaseCount);
-                System.out.println("Dies war heute der "+getPurchaseCounter()+". Einkauf.");
+                System.out.println("Dies war heute der " + getPurchaseCounter() + ". Einkauf.");
                 abbruch = true;
             }
         }
@@ -140,7 +140,7 @@ public class Shop {
         return new Receipt(lcd, shopname, r.getNextValue());
     }
 
-    public double getReceiptItemsTotal( List<ReceiptItem> listForReceipt) {
+    public double getReceiptItemsTotal(List<ReceiptItem> listForReceipt) {
 
         double total = 0;
         int i = 0;
@@ -170,6 +170,8 @@ public class Shop {
         System.out.println("Zurück zum Menü mit beliebiger Taste!");
         scanner.nextLine();
     }
+
+
 
 
     // AUX
