@@ -1,5 +1,6 @@
 import java.io.BufferedReader;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -10,20 +11,36 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Scanner;
 
+import com.opencsv.CSVWriter;
 
 public class Driver {
 
+    List<ReceiptItem> listAllReceiptItemsDay = new ArrayList<>();
+    protected double tagesumsatz;
+    int counter;
 
     public Driver() {
     }
 
+    public void incTagesumsatz(double receiptTotal){
+        tagesumsatz=tagesumsatz+receiptTotal;
+    }
+
+
+
+    public void incCounter(){
+        counter++;
+    }
+    public int getCounter(){
+        return counter;
+    }
 
     public static void main(String[] args) throws IOException {
 
         Scanner scanner = new Scanner(System.in);
         Driver driver = new Driver();
         Shop shop = new Shop();
-        Accounting accounts = new Accounting();
+        List<ReceiptItem> aux = new ArrayList<>();
         Path path = Paths.get("output\\items.txt");
         if (Files.notExists(path)) {
             Files.createFile(path);
@@ -57,18 +74,27 @@ public class Driver {
                 case 1 -> shop.addItem(path, inputListFromFile);
                 case 2 -> shop.displayItems(inputListFromFile);
                 case 3 -> {
+                    driver.incCounter();
                     List<ReceiptItem> receiptItemListReturned = shop.sellItems(inputListFromFile);
-                    driver.readoutItem(receiptItemListReturned);
+                    for (int j = 0; j < receiptItemListReturned.size(); j++) {
+                        aux.add(j, receiptItemListReturned.get(j));
+                    }
+                    driver.setListAllReceiptItemsDay(aux);// doesn't work
+
+//                  TODO put this in accounting: driver.readoutItem(driver.getListAllReceiptItemsDay());
+
                     int numberOfItems = 0;
                     for (ReceiptItem item : receiptItemListReturned) {
                         numberOfItems += item.quantity;
                     }
                     double total = shop.getReceiptItemsTotal(receiptItemListReturned);
+                    driver.incTagesumsatz(total);
                     Receipt receipt = shop.createReceipt();
                     shop.printReceipt(receipt, receiptItemListReturned, total);
                 }
 
-                case 4 -> accounts.accounting();
+                case 4 -> driver.accountingMenu();
+                case 5 -> csvConverter();
                 case 9 -> {
                     System.out.println("Das Programm wird beendet!");
                     System.exit(0);
@@ -78,16 +104,78 @@ public class Driver {
         }
     }
 
+
+    public void accountingMenu() {
+
+        Shop shop = new Shop();
+        System.out.println();
+        System.out.println("***********************************************");
+        System.out.println("ABRECHNUNG der Firma "+shop.getShopname());
+        System.out.println("***********************************************");
+        System.out.println();
+        System.out.println("Tagesumsatz gesamt: EUR "+getTagesumsatz());
+        System.out.println();
+        System.out.println("Anzahl der heute getätigten Einkäufe: "+ getCounter());
+        System.out.println();
+        System.out.println("Die Tagesabrechnung der verkauften Produkte und deren Anzhal :");
+//        System.out.println();
+//        readoutItem(listAllReceiptItemsDay);
+//        System.out.println();
+        System.out.println("Tagesumsatz gesamt: EUR "+getTagesumsatz());
+        System.out.println();
+        System.out.println("");
+        System.exit(0);
+
+    }
+
+    public static void csvConverter() throws IOException {
+
+        List<String[]> csvData = createCsvDataSimple();
+
+        // default all fields are enclosed in double quotes
+        // default separator is a comma
+        try (CSVWriter writer = new CSVWriter(new FileWriter("output\\test.csv"))) {
+            writer.writeAll(csvData);
+        }
+
+    }
+
+    private static List<String[]> createCsvDataSimple() {
+
+        String[] header = {"id", "name", "address", "phone"};
+        String[] record1 = {"1", "first name", "address 1", "11111"};
+        String[] record2 = {"2", "second name", "address 2", "22222"};
+
+        List<String[]> list = new ArrayList<>();
+        list.add(header);
+        list.add(record1);
+        list.add(record2);
+
+        return list;
+    }
+
     public void readoutItem(List<ReceiptItem> receiptItemListReturn) {
 
         System.out.println("Auslesen des return Objektes receipt aus createReceipt:");
         for (ReceiptItem item : receiptItemListReturn) {
+            readoutItem(receiptItemListReturn);
             System.out.println(item.stringify());
             System.out.println();
         }
         System.out.println("Auslesen ENde");
     }
 
+    public double getTagesumsatz() {
+        return tagesumsatz;
+    }
+
+    public List<ReceiptItem> getListAllReceiptItemsDay() {
+        return listAllReceiptItemsDay;
+    }
+
+    public void setListAllReceiptItemsDay(List<ReceiptItem> listAllReceiptItemsDay) {
+        this.listAllReceiptItemsDay = listAllReceiptItemsDay;
+    }
 
     // AUX
     private String convert() {
