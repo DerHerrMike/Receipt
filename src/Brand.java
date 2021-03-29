@@ -10,7 +10,6 @@ public class Brand {
     }
 
 
-
     public String getName() {
         return name;
     }

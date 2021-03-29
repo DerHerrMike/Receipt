@@ -8,12 +8,12 @@ import java.util.Scanner;
 
 public class Item {
 
-    protected String sku;
-    protected String brand;
-    protected String name;
-    protected double ppu;
-    List<String> brandsList;
-    List<String> countryList;
+    private String sku;
+    private String brand;
+    private String name;
+    private double ppu;
+    private List<String> brandsList;
+    private List<String> countryList;
 
 
     public Item(String sku, String brand, String name, double ppu) {
@@ -28,7 +28,6 @@ public class Item {
     }
 
 
-
     public int defIterator() {
 
         Scanner scanner = new Scanner(System.in);
@@ -40,7 +39,7 @@ public class Item {
     }
 
 
-    public Item itemCreator (Path path, Path brands, List<Item> itemsList) throws IOException {
+    public Item itemCreator(Path path, Path pathToBrands, List<Item> itemsList) throws IOException {
 
         Scanner scanner = new Scanner(System.in);
         System.out.println();
@@ -49,7 +48,7 @@ public class Item {
         setSku(scanner.nextLine());
         System.out.println("Brand: ");
         setBrand(scanner.nextLine());
-        writeBrandsToFile(brands);      //TODO this call adds comma to csv file
+        writeBrandsToFile(pathToBrands, brand);      //TODO this call adds comma to csv file
 
         System.out.println("Name:");
         setName(scanner.nextLine());
@@ -70,30 +69,32 @@ public class Item {
         return ",";
     }
 
-    public void writeBrandsToFile(Path brands) throws IOException {
+    public void writeBrandsToFile(Path pathToBrand, String brand) throws IOException {
 
-        String object = convertSimple();
+      //  String object = convertSimple();
 
-        if (Files.notExists(brands)) {
-            Files.createFile(brands);
+        if (Files.notExists(pathToBrand)) {
+            Files.createFile(pathToBrand);
         }
 
+        String entry = brand + "\n";
+
         Files.write(
-                brands,
-                object.getBytes(),
+                pathToBrand,
+                entry.getBytes(),
                 StandardOpenOption.APPEND);
     }
 
 
     private String convert() {
         return getSku() +
-                ";" + getBrand()
+                "," + getBrand()
                 +
-                ";" +
+                "," +
                 getName() +
-                ";" +
+                "," +
                 getPpu() +
-                ";" +
+                "," +
                 "\n";
     }
 

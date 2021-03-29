@@ -30,9 +30,10 @@ public class Receipt {
 
     public String stringify() {
         Shop shop = new Shop();
-        return System.getProperty("line.separator") + shop.getShopname() + " - Ihr Partner im Handwerk!" +
-                System.getProperty("line.separator") + "Einkauf am/um: " + getTimestamp() +
-                System.getProperty("line.separator") +
+        String lineEnding = System.getProperty("line.separator");
+        return lineEnding + shop.getShopname() + " - Ihr Partner im Handwerk!" +
+                lineEnding + "Einkauf am/um: " + getTimestamp() +
+                lineEnding +
                 "Rechnungsnummer " + getNextValue() + ", UID Nr. GB8904321";
     }
 

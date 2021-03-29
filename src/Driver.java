@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Scanner;
+
 import com.opencsv.CSVWriter;
 
 
@@ -17,19 +18,14 @@ import com.opencsv.CSVWriter;
 
 public class Driver {
 
-    List<ReceiptItem> listAllReceiptItemsDay = new ArrayList<>();
-    protected double tagesumsatz;
-    int counter;
 
-    public Driver() {
-    }
+
 
     public static void main(String[] args) throws IOException {
-
-        Scanner scanner = new Scanner(System.in);
+        double tagesumsatz = 0;
+        List<ReceiptItem> listAllReceiptItemsDay = new ArrayList<>();
         Driver driver = new Driver();
-        Shop shop = new Shop();
-        List<ReceiptItem> aux = new ArrayList<>();
+        //   List<ReceiptItem> aux = new ArrayList<>();
         Path brands = Paths.get("output\\brands.csv");
         if (Files.notExists(brands)) {
             Files.createFile(brands);
@@ -40,50 +36,48 @@ public class Driver {
         }
         List<Item> inputListFromFile = new ArrayList<>(Objects.requireNonNull(readAllLines(path)));
 
+        Shop shop = new Shop();
         shop.designNameSelection();
         shop.chooseName();
         System.out.println();
         System.out.println();
 
+        int counter = 0;
+        Scanner scanner = new Scanner(System.in);
         while (true) {
             System.out.println();
             System.out.println("WILLKOMMEN BEI " + shop.getShopname() + " - Tools4Pros");
-            System.out.println("--------------------------------------");
-            System.out.println();
-            System.out.println("Items ins Lager hinzufügen = 1");
-            System.out.println();
-            System.out.println("Items in Lager auflisten = 2");
-            System.out.println();
-            System.out.println("Items verkaufen = 3");
-            System.out.println();
-            System.out.println("Buchhaltung aufrufen = 4");
-            System.out.println();
-            System.out.println("Programm beenden = 9");
-            System.out.println();
-            System.out.println("Bitte Auswahl treffen: ");
+            String output = """
+                                        
+                    --------------------------------------
+                    Items ins Lager hinzufügen = 1
+                    Items in Lager auflisten = 2
+                    Items verkaufen = 3
+                    Buchhaltung aufrufen = 4
+                    Programm beenden = 9
+                    Bitte Auswahl treffen: 
+                    """;
+            System.out.println(output);
             int auswahl = scanner.nextInt();
             scanner.nextLine();
             switch (auswahl) {
-                case 1 -> shop.addItem(path,brands, inputListFromFile);
+                case 1 -> shop.addItem(path, brands, inputListFromFile);
                 case 2 -> shop.displayItems(inputListFromFile);
                 case 3 -> {
-                    driver.incCounter();
                     List<ReceiptItem> receiptItemListReturned = shop.sellItems(inputListFromFile);
-                    for (int j = 0; j < receiptItemListReturned.size(); j++) {
-                        aux.add(j, receiptItemListReturned.get(j));
-                    }
-                    driver.setListAllReceiptItemsDay(aux);// doesn't work
+                    listAllReceiptItemsDay.addAll(receiptItemListReturned);
                     int numberOfItems = 0;
                     for (ReceiptItem item : receiptItemListReturned) {
-                        numberOfItems += item.quantity;
+                        numberOfItems += item.getQuantity();
                     }
                     double total = shop.getReceiptItemsTotal(receiptItemListReturned);
-                    driver.incTagesumsatz(total);
+                    tagesumsatz = driver.incTagesumsatz(tagesumsatz, total);
                     Receipt receipt = shop.createReceipt();
                     shop.printReceipt(receipt, receiptItemListReturned, total);
+                    counter++;
                 }
 
-                case 4 -> driver.accountingMenu();
+                case 4 -> driver.accountingMenu(shop, listAllReceiptItemsDay, counter, tagesumsatz);
                 case 5 -> csvConverter();
                 case 9 -> {
                     System.out.println("Das Programm wird beendet!");
@@ -94,34 +88,31 @@ public class Driver {
         }
     }
 
-    public String getNameShop(){
+    public String getNameShop() {
         Shop shop = new Shop();
 
         return shop.getShopname();
     }
 
-    public void accountingMenu() {
-
-        Shop shop = new Shop();
+    public void accountingMenu(Shop shop, List<ReceiptItem> listAllReceiptItemsDay, int counter, double tagesumsatz) {
         System.out.println();
         System.out.println("***********************************************");
         System.out.println("ABRECHNUNG der Firma " + shop.getShopname());
         System.out.println("***********************************************");
         System.out.println();
         System.out.println();
-        System.out.println("Anzahl der heute getätigten Einkäufe: "+ getCounter());
+        System.out.println("Anzahl der heute getätigten Einkäufe: " + counter);
         System.out.println();
         System.out.println("Die Tagesabrechnung der verkauften Produkte und deren Anzahl :");
         System.out.println();
         readoutItem(listAllReceiptItemsDay);
         System.out.println();
-        System.out.println("Der Tagesumsatz gesamt beträgt: EUR "+getTagesumsatz());
+        System.out.println("Der Tagesumsatz gesamt beträgt: EUR " + tagesumsatz);
         System.out.println();
         System.out.println("");
         System.exit(0);
 
     }
-
 
 
     public static void csvConverter() throws IOException {
@@ -159,28 +150,10 @@ public class Driver {
     }
 
 
-    public void incTagesumsatz(double receiptTotal){
-        tagesumsatz=tagesumsatz+receiptTotal;
+    public double incTagesumsatz(double tagesumsatz, double receiptTotal) {
+        return  tagesumsatz + receiptTotal;
     }
 
-    public void incCounter(){
-        counter++;
-    }
-    public int getCounter(){
-        return counter;
-    }
-
-    public double getTagesumsatz() {
-        return tagesumsatz;
-    }
-
-    public List<ReceiptItem> getListAllReceiptItemsDay() {
-        return listAllReceiptItemsDay;
-    }
-
-    public void setListAllReceiptItemsDay(List<ReceiptItem> listAllReceiptItemsDay) {
-        this.listAllReceiptItemsDay = listAllReceiptItemsDay;
-    }
 
     // AUX
     private String convert() {

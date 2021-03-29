@@ -1,4 +1,5 @@
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -10,13 +11,9 @@ import java.util.Scanner;
 
 public class Shop {
 
-    protected String shopname;
-    protected int purchaseCounter;
+    private String shopname;
+    private int purchaseCounter;
 
-
-    //no-args constructor
-    public Shop() {
-    }
 
     public void designNameSelection() {
         System.out.println("PROGRAMM ZU EIN- UND VERKAUF EINES KLEINEN UNTERNEHMENS");
@@ -111,14 +108,12 @@ public class Shop {
             details4Accounting.add(String.valueOf(anzahl));
             scanner.nextLine();
             int skuPosition = iterationCounter;
-            ReceiptItem itemsOnListItems = new ReceiptItem();
-            itemsOnListItems.setItem(getItemsFromFile.get(skuPosition).getBrand() + ", " + getItemsFromFile.get(skuPosition).getName());
-            itemsOnListItems.setPrice(getItemsFromFile.get(skuPosition).getPpu());
-            String selectedItemBrandName = (getItemsFromFile.get(skuPosition).getBrand() + ", " + getItemsFromFile.get(skuPosition).getName());
-            double selectedItemPrice = getItemsFromFile.get(skuPosition).getPpu();
-            details4Accounting.add(String.valueOf(selectedItemPrice));
-            ReceiptItem bought = new ReceiptItem(selectedItemBrandName, anzahl, selectedItemPrice);
-            receiptItemList.add(bought);
+            ReceiptItem receiptItem = getRecieptItem(getItemsFromFile, anzahl, skuPosition);
+            //    String selectedItemBrandName = (getItemsFromFile.get(skuPosition).getBrand() + ", " + getItemsFromFile.get(skuPosition).getName());
+            //     double selectedItemPrice = getItemsFromFile.get(skuPosition).getPpu();
+            //     details4Accounting.add(String.valueOf(selectedItemPrice));
+            //ReceiptItem bought = new ReceiptItem(selectedItemBrandName, anzahl, selectedItemPrice);
+            receiptItemList.add(receiptItem);
             System.out.println();
             System.out.println("Weiteres Produkt kaufen? (j/n): ");
             String furtherItems = scanner.nextLine();
@@ -132,6 +127,22 @@ public class Shop {
         return receiptItemList;
     }
 
+    private ReceiptItem getRecieptItem(List<Item> getItemsFromFile, int anzahl, int skuPosition) {
+
+        String item = getItemsFromFile.get(skuPosition).getBrand() + ", " + getItemsFromFile.get(skuPosition).getName();
+        double ppu = getItemsFromFile.get(skuPosition).getPpu();
+        BigDecimal price = new BigDecimal(ppu);
+        return new ReceiptItem(item, anzahl, price);
+    }
+
+  /*  private String getString(List<Item> getItemsFromFile, int skuPosition) {
+        ReceiptItem itemsOnListItems = new ReceiptItem();
+        itemsOnListItems.setItem(getItemsFromFile.get(skuPosition).getBrand() + ", " + getItemsFromFile.get(skuPosition).getName());
+        itemsOnListItems.setPrice(getItemsFromFile.get(skuPosition).getPpu());
+        String selectedItemBrandName = (getItemsFromFile.get(skuPosition).getBrand() + ", " + getItemsFromFile.get(skuPosition).getName());
+        return selectedItemBrandName;
+    }
+*/
     public Receipt createReceipt() {
 
         Receipt r = new Receipt();
@@ -150,6 +161,7 @@ public class Shop {
         return total;
     }
 
+    //TODO BigDecimal von total
     public void printReceipt(Receipt receipt, List<ReceiptItem> listOfItemsForReceipt, double total) {
 
         Scanner scanner = new Scanner(System.in);
@@ -169,8 +181,6 @@ public class Shop {
         System.out.println("Zurück zum Menü mit beliebiger Taste!");
         scanner.nextLine();
     }
-
-
 
 
     // AUX

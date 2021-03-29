@@ -20,3 +20,7 @@ nbv;VOLVO (SE);AirCooler S3000;199.9;
 nbv;VOLVO (SE);AirCooler S3000;199.9;
 ASD;PORSCHE;GTI Klappe;399.0;
 ASD;PORSCHE;GTI Klappe;399.0;
+SKU;Brand;Name;1.0;
+SKU;Brand;Name;1.0;
+SKU;Brand2;Name2;2.0;
+SKU;Brand2;Name2;2.0;
