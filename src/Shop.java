@@ -28,8 +28,7 @@ public class Shop {
     public void chooseName() {
 
         Scanner scanner = new Scanner(System.in);
-        String nameshop = scanner.nextLine();
-        setShopname(nameshop);
+        setShopname(scanner.nextLine());
     }
 
 
@@ -81,7 +80,7 @@ public class Shop {
         Path soldItemsDay = Paths.get("output\\soldItemsDay.txt");
 
         System.out.println();
-        System.out.println("Willkommen bei " + shopname + " - Tools4Pros");
+        System.out.println("Willkommen bei " + getShopname() + " - Tools4Pros");
         System.out.println();
         System.out.println("Folgende Produkte sind aktuell verfügbar:");
         System.out.println();

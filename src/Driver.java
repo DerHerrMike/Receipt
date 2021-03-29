@@ -109,7 +109,7 @@ public class Driver {
         Shop shop = new Shop();
         System.out.println();
         System.out.println("***********************************************");
-        System.out.println("ABRECHNUNG der Firma "+shop.getShopname());
+        System.out.println("ABRECHNUNG der Firma " + shop.getShopname());
         System.out.println("***********************************************");
         System.out.println();
         System.out.println();
