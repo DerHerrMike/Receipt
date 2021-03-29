@@ -29,12 +29,12 @@ public class Shop {
     }
 
 
-    public void addItem(Path path, Path brands, List<Item> getItemsFromFile) throws IOException {
+    public void addItem(Path path, Path brands, Path itemPath, List<Item> getItemsFromFile) throws IOException {
 
         Item item = new Item();
         int i = 0;
         while (i < item.defIterator()) {
-            Item insert = item.itemCreator(path, brands, getItemsFromFile);
+            Item insert = item.itemCreator(path, brands, itemPath,getItemsFromFile);
             getItemsFromFile.add(insert);
             item.writeToFile(path);
             i++;
@@ -74,7 +74,7 @@ public class Shop {
         Scanner scanner = new Scanner(System.in);
         List<ReceiptItem> receiptItemList = new ArrayList<>();
         List<String> details4Accounting = new ArrayList<>();
-        Path soldItemsDay = Paths.get("output\\soldItemsDay.txt");
+        Path pathToReceiptItems = Paths.get("output\\receiptItems.csv");
 
         System.out.println();
         System.out.println("Willkommen bei " + getShopname() + " - Tools4Pros");
@@ -108,11 +108,7 @@ public class Shop {
             details4Accounting.add(String.valueOf(anzahl));
             scanner.nextLine();
             int skuPosition = iterationCounter;
-            ReceiptItem receiptItem = getRecieptItem(getItemsFromFile, anzahl, skuPosition);
-            //    String selectedItemBrandName = (getItemsFromFile.get(skuPosition).getBrand() + ", " + getItemsFromFile.get(skuPosition).getName());
-            //     double selectedItemPrice = getItemsFromFile.get(skuPosition).getPpu();
-            //     details4Accounting.add(String.valueOf(selectedItemPrice));
-            //ReceiptItem bought = new ReceiptItem(selectedItemBrandName, anzahl, selectedItemPrice);
+            ReceiptItem receiptItem = getRecieptItem(pathToReceiptItems,getItemsFromFile,anzahl,skuPosition);
             receiptItemList.add(receiptItem);
             System.out.println();
             System.out.println("Weiteres Produkt kaufen? (j/n): ");
@@ -127,27 +123,34 @@ public class Shop {
         return receiptItemList;
     }
 
-    private ReceiptItem getRecieptItem(List<Item> getItemsFromFile, int anzahl, int skuPosition) {
+    private ReceiptItem getRecieptItem(Path pathToReceiptItems, List<Item> getItemsFromFile, int anzahl, int skuPosition) throws IOException {
 
         String item = getItemsFromFile.get(skuPosition).getBrand() + ", " + getItemsFromFile.get(skuPosition).getName();
         double ppu = getItemsFromFile.get(skuPosition).getPpu();
         BigDecimal price = new BigDecimal(ppu);
+        writeReceiptItemstoFile(pathToReceiptItems,item,ppu,price);
         return new ReceiptItem(item, anzahl, price);
     }
 
-  /*  private String getString(List<Item> getItemsFromFile, int skuPosition) {
-        ReceiptItem itemsOnListItems = new ReceiptItem();
-        itemsOnListItems.setItem(getItemsFromFile.get(skuPosition).getBrand() + ", " + getItemsFromFile.get(skuPosition).getName());
-        itemsOnListItems.setPrice(getItemsFromFile.get(skuPosition).getPpu());
-        String selectedItemBrandName = (getItemsFromFile.get(skuPosition).getBrand() + ", " + getItemsFromFile.get(skuPosition).getName());
-        return selectedItemBrandName;
-    }
-*/
-    public Receipt createReceipt() {
+    public Receipt createReceipt() throws IOException {
 
         Receipt r = new Receipt();
         LocalDateTime lcd = LocalDateTime.now();
         return new Receipt(lcd, shopname, r.getNextValue());
+    }
+
+    public void writeReceiptItemstoFile(Path pathToReceiptItems, String receiptItems, double ppu, BigDecimal price) throws IOException {
+
+        if (Files.notExists(pathToReceiptItems)) {
+            Files.createFile(pathToReceiptItems);
+        }
+        String ppu1 = String.valueOf(ppu);
+        String price1 = String.valueOf(price);
+        String entry =  receiptItems+","+ppu1 +","+price1+ "\n";
+        Files.write(
+                pathToReceiptItems,
+                entry.getBytes(),
+                StandardOpenOption.APPEND);
     }
 
     public double getReceiptItemsTotal(List<ReceiptItem> listForReceipt) {
@@ -188,19 +191,7 @@ public class Shop {
         return ";";
     }
 
-    public void writeToFile(Path path) throws IOException {
 
-        String object = convert();
-
-        if (Files.notExists(path)) {
-            Files.createFile(path);
-        }
-
-        Files.write(
-                path,
-                object.getBytes(),
-                StandardOpenOption.APPEND);
-    }
 
 
     // G&S

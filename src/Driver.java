@@ -6,6 +6,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -34,6 +35,14 @@ public class Driver {
         if (Files.notExists(path)) {
             Files.createFile(path);
         }
+        Path items = Paths.get("output\\items.csv");
+        if (Files.notExists(brands)) {
+            Files.createFile(brands);
+        }
+        Path receiptsToFile = Paths.get("output\\receipts.csv");
+        if (Files.notExists(brands)) {
+            Files.createFile(brands);
+        }
         List<Item> inputListFromFile = new ArrayList<>(Objects.requireNonNull(readAllLines(path)));
 
         Shop shop = new Shop();
@@ -61,24 +70,24 @@ public class Driver {
             int auswahl = scanner.nextInt();
             scanner.nextLine();
             switch (auswahl) {
-                case 1 -> shop.addItem(path, brands, inputListFromFile);
+                case 1 -> shop.addItem(path, brands, items,inputListFromFile);
                 case 2 -> shop.displayItems(inputListFromFile);
                 case 3 -> {
                     List<ReceiptItem> receiptItemListReturned = shop.sellItems(inputListFromFile);
                     listAllReceiptItemsDay.addAll(receiptItemListReturned);
-                    int numberOfItems = 0;
-                    for (ReceiptItem item : receiptItemListReturned) {
-                        numberOfItems += item.getQuantity();
-                    }
                     double total = shop.getReceiptItemsTotal(receiptItemListReturned);
                     tagesumsatz = driver.incTagesumsatz(tagesumsatz, total);
                     Receipt receipt = shop.createReceipt();
+                    int receiptNumber = receipt.getReceiptNumber();
+                    String shopName = receipt.getShopname();
+                    String lcd = receipt.getTimestamp();
+                    writeReceiptsToFile(receiptsToFile,receiptNumber,shopName,lcd);
                     shop.printReceipt(receipt, receiptItemListReturned, total);
                     counter++;
                 }
 
                 case 4 -> driver.accountingMenu(shop, listAllReceiptItemsDay, counter, tagesumsatz);
-                case 5 -> csvConverter();
+                case 5 -> System.out.println("Case 5");
                 case 9 -> {
                     System.out.println("Das Programm wird beendet!");
                     System.exit(0);
@@ -88,10 +97,17 @@ public class Driver {
         }
     }
 
-    public String getNameShop() {
-        Shop shop = new Shop();
+    public static void writeReceiptsToFile(Path receiptToFile, int receiptNumber, String shopName, String lcd) throws IOException {
 
-        return shop.getShopname();
+        if (Files.notExists(receiptToFile)) {
+            Files.createFile(receiptToFile);
+        }
+        String number = String.valueOf(receiptNumber);
+        String entry =  shopName+","+number +","+lcd+ "\n";
+        Files.write(
+                receiptToFile,
+                entry.getBytes(),
+                StandardOpenOption.APPEND);
     }
 
     public void accountingMenu(Shop shop, List<ReceiptItem> listAllReceiptItemsDay, int counter, double tagesumsatz) {
@@ -112,32 +128,6 @@ public class Driver {
         System.out.println("");
         System.exit(0);
 
-    }
-
-
-    public static void csvConverter() throws IOException {
-
-        List<String[]> csvData = createCsvDataSimple();
-
-        // default all fields are enclosed in double quotes
-        // default separator is a comma
-        try (CSVWriter writer = new CSVWriter(new FileWriter("output\\test.csv"))) {
-            writer.writeAll(csvData);
-        }
-    }
-
-    private static List<String[]> createCsvDataSimple() {
-
-        String[] header = {"id", "name", "address", "phone"};
-        String[] record1 = {"1", "first name", "address 1", "11111"};
-        String[] record2 = {"2", "second name", "address 2", "22222"};
-
-        List<String[]> list = new ArrayList<>();
-        list.add(header);
-        list.add(record1);
-        list.add(record2);
-
-        return list;
     }
 
     public void readoutItem(List<ReceiptItem> receiptItemListReturn) {
@@ -188,7 +178,7 @@ public class Driver {
                 reader = new BufferedReader(new FileReader(String.valueOf(path)));
                 String line = reader.readLine();
                 while (line != null) {
-                    String[] ausgeleseneZeile = line.split(";");
+                    String[] ausgeleseneZeile = line.split(",");
                     //SKU
                     String skuF = ausgeleseneZeile[0];
                     //BRAND

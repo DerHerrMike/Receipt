@@ -1,7 +1,6 @@
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.util.List;
 import java.util.Scanner;
@@ -12,8 +11,6 @@ public class Item {
     private String brand;
     private String name;
     private double ppu;
-    private List<String> brandsList;
-    private List<String> countryList;
 
 
     public Item(String sku, String brand, String name, double ppu) {
@@ -23,8 +20,8 @@ public class Item {
         this.ppu = ppu;
     }
 
-    // empty constructor to create instance of Item
     public Item() {
+
     }
 
 
@@ -38,8 +35,7 @@ public class Item {
         return units;
     }
 
-
-    public Item itemCreator(Path path, Path pathToBrands, List<Item> itemsList) throws IOException {
+    public Item itemCreator(Path path, Path pathToBrands, Path pathToItem, List<Item> itemsList) throws IOException {
 
         Scanner scanner = new Scanner(System.in);
         System.out.println();
@@ -48,10 +44,10 @@ public class Item {
         setSku(scanner.nextLine());
         System.out.println("Brand: ");
         setBrand(scanner.nextLine());
-        writeBrandsToFile(pathToBrands, brand);      //TODO this call adds comma to csv file
-
+        writeBrandsToFile(pathToBrands, brand);
         System.out.println("Name:");
         setName(scanner.nextLine());
+        writeItemsToFile(pathToItem, name);
         System.out.println("Price per Unit: ");
         setPpu(scanner.nextDouble());
         System.out.println("Alle Daten zu diesem Item erfasst!");
@@ -65,20 +61,25 @@ public class Item {
 
 
     // AUX
-    private String convertSimple() {
-        return ",";
+    public void writeItemsToFile(Path pathToItem, String item) throws IOException {
+
+        if (Files.notExists(pathToItem)) {
+            Files.createFile(pathToItem);
+        }
+        String entry = item + "\n";
+        Files.write(
+                pathToItem,
+                entry.getBytes(),
+                StandardOpenOption.APPEND);
     }
 
-    public void writeBrandsToFile(Path pathToBrand, String brand) throws IOException {
 
-      //  String object = convertSimple();
+    public void writeBrandsToFile(Path pathToBrand, String brand) throws IOException {
 
         if (Files.notExists(pathToBrand)) {
             Files.createFile(pathToBrand);
         }
-
         String entry = brand + "\n";
-
         Files.write(
                 pathToBrand,
                 entry.getBytes(),

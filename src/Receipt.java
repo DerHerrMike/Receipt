@@ -8,9 +8,9 @@ import java.time.format.DateTimeFormatter;
 
 public class Receipt {
 
-    protected LocalDateTime timestamp;
+    private LocalDateTime timestamp;
     public String shopname;
-    protected int receiptNumber = 0;
+    private int receiptNumber = 0;
 
     // standard constructor
     public Receipt(LocalDateTime timestamp, String shopname, int receiptNumber) {
@@ -52,7 +52,7 @@ public class Receipt {
     }
 
     private String convert() {
-        return ";";
+        return ",";
     }
 
     public String getTimestamp() {
@@ -60,4 +60,11 @@ public class Receipt {
         return timestamp.format(format);
     }
 
+    public String getShopname() {
+        return shopname;
+    }
+
+    public int getReceiptNumber() {
+        return receiptNumber;
+    }
 }

@@ -1,26 +1,20 @@
-B3000;Binford (US);Power 3000 Bohrmaschine;299.9;
-X5901;XRay (DE);Night Vision 5000;1450.5;
-XR5004;Black & Decker;Power Bohrer 4000;299.9;
-KX6HU;Phillips;Shaver 4000;34.9;
-OLK3Y;Klarna;UPay;100.0;
-KX78Z;L'Oreal;Anti-Aging Q5;12.9;
-KLP;MICROSOFT;Windows;100.0;
-XCV;DISNEY;Goofy;34.0;
-UIL;DISNEY;Donald DUck;50.9;
-TZU;APPLE;iMac;2002.0;
-KLO9;Black & Decker;Power Bohrer 5000;299.9;
-rft;ree;xdff;23.0;
-JKU;Echad;Enlightenment Now;100.0;
-IKL;LernTech;Neuro Enhancer;29.9;
-UZT;Samsung;Tablet Master;399.9;
-cvb;OSHO;Danger: Truth at Work;29.9;
-CVB;OSHO;Danger: Truth at work!;29.9;
-CVB;OSHO;Danger: Truth at work!;29.9;
-nbv;VOLVO (SE);AirCooler S3000;199.9;
-nbv;VOLVO (SE);AirCooler S3000;199.9;
-ASD;PORSCHE;GTI Klappe;399.0;
-ASD;PORSCHE;GTI Klappe;399.0;
-SKU;Brand;Name;1.0;
-SKU;Brand;Name;1.0;
-SKU;Brand2;Name2;2.0;
-SKU;Brand2;Name2;2.0;
+B3000,Binford (US),Power 3000 Bohrmaschine,299.9,
+X5901,XRay (DE),Night Vision 5000,1450.5,
+XR5004,Black & Decker,Power Bohrer 4000,299.9,
+KX6HU,Phillips,Shaver 4000,34.9,
+OLK3Y,Klarna,UPay,100.0,
+KX78Z,L'Oreal,Anti-Aging Q5,12.9,
+KLP,MICROSOFT,Windows,100.0,
+XCV,DISNEY,Goofy,34.0,
+UIL,DISNEY,Donald DUck,50.9,
+TZU,APPLE,iMac,2002.0,
+KLO9,Black & Decker,Power Bohrer 5000,299.9,
+JKU,Echad,Enlightenment Now,100.0,
+IKL,LernTech,Neuro Enhancer,29.9,
+UZT,Samsung,Tablet Master,399.9,
+CVB,OSHO,Danger: Truth at work!,29.9,
+NBV,VOLVO (SE),AirCooler S3000,199.9,
+ASD,PORSCHE,GTI Klappe,399.0,
+UIO,BENETTON,Rollkragen Pullover,129.9,
+MNB,UNILEVER,Ajax Reiniger,1.29,
+MNB,UNILEVER,Ajax Reiniger,1.29,
