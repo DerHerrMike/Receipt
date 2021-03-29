@@ -81,7 +81,6 @@ public class Driver {
                     }
                     driver.setListAllReceiptItemsDay(aux);// doesn't work
 
-//                  TODO put this in accounting: driver.readoutItem(driver.getListAllReceiptItemsDay());
 
                     int numberOfItems = 0;
                     for (ReceiptItem item : receiptItemListReturned) {
@@ -113,15 +112,14 @@ public class Driver {
         System.out.println("ABRECHNUNG der Firma "+shop.getShopname());
         System.out.println("***********************************************");
         System.out.println();
-        System.out.println("Tagesumsatz gesamt: EUR "+getTagesumsatz());
         System.out.println();
         System.out.println("Anzahl der heute getätigten Einkäufe: "+ getCounter());
         System.out.println();
-        System.out.println("Die Tagesabrechnung der verkauften Produkte und deren Anzhal :");
-//        System.out.println();
-//        readoutItem(listAllReceiptItemsDay);
-//        System.out.println();
-        System.out.println("Tagesumsatz gesamt: EUR "+getTagesumsatz());
+        System.out.println("Die Tagesabrechnung der verkauften Produkte und deren Anzahl :");
+        System.out.println();
+        readoutItem(listAllReceiptItemsDay);
+        System.out.println();
+        System.out.println("Der Tagesumsatz gesamt beträgt: EUR "+getTagesumsatz());
         System.out.println();
         System.out.println("");
         System.exit(0);
@@ -156,13 +154,11 @@ public class Driver {
 
     public void readoutItem(List<ReceiptItem> receiptItemListReturn) {
 
-        System.out.println("Auslesen des return Objektes receipt aus createReceipt:");
         for (ReceiptItem item : receiptItemListReturn) {
-            readoutItem(receiptItemListReturn);
             System.out.println(item.stringify());
             System.out.println();
         }
-        System.out.println("Auslesen ENde");
+        System.out.println("---TAGESUMSATZLISTE ENDE---");
     }
 
     public double getTagesumsatz() {
