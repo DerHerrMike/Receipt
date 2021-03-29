@@ -32,12 +32,12 @@ public class Shop {
     }
 
 
-    public void addItem(Path path, List<Item> getItemsFromFile) throws IOException {
+    public void addItem(Path path, Path brands, List<Item> getItemsFromFile) throws IOException {
 
         Item item = new Item();
         int i = 0;
         while (i < item.defIterator()) {
-            Item insert = item.itemCreator(path, getItemsFromFile);
+            Item insert = item.itemCreator(path, brands, getItemsFromFile);
             getItemsFromFile.add(insert);
             item.writeToFile(path);
             i++;

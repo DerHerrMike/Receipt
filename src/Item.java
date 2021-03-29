@@ -1,6 +1,7 @@
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.util.List;
 import java.util.Scanner;
@@ -11,6 +12,8 @@ public class Item {
     protected String brand;
     protected String name;
     protected double ppu;
+    List<String> brandsList;
+    List<String> countryList;
 
 
     public Item(String sku, String brand, String name, double ppu) {
@@ -24,7 +27,9 @@ public class Item {
     public Item() {
     }
 
-    int defIterator() {
+
+
+    public int defIterator() {
 
         Scanner scanner = new Scanner(System.in);
         System.out.println();
@@ -34,7 +39,8 @@ public class Item {
         return units;
     }
 
-    public Item itemCreator (Path path, List<Item> itemsList) throws IOException {
+
+    public Item itemCreator (Path path, Path brands, List<Item> itemsList) throws IOException {
 
         Scanner scanner = new Scanner(System.in);
         System.out.println();
@@ -43,6 +49,8 @@ public class Item {
         setSku(scanner.nextLine());
         System.out.println("Brand: ");
         setBrand(scanner.nextLine());
+        writeBrandsToFile(brands);      //TODO this call adds comma to csv file
+
         System.out.println("Name:");
         setName(scanner.nextLine());
         System.out.println("Price per Unit: ");
@@ -58,6 +66,25 @@ public class Item {
 
 
     // AUX
+    private String convertSimple() {
+        return ",";
+    }
+
+    public void writeBrandsToFile(Path brands) throws IOException {
+
+        String object = convertSimple();
+
+        if (Files.notExists(brands)) {
+            Files.createFile(brands);
+        }
+
+        Files.write(
+                brands,
+                object.getBytes(),
+                StandardOpenOption.APPEND);
+    }
+
+
     private String convert() {
         return getSku() +
                 ";" + getBrand()

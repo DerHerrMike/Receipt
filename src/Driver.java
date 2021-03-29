@@ -10,8 +10,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Scanner;
-
 import com.opencsv.CSVWriter;
+
+
+//TODO String.format
 
 public class Driver {
 
@@ -22,25 +24,16 @@ public class Driver {
     public Driver() {
     }
 
-    public void incTagesumsatz(double receiptTotal){
-        tagesumsatz=tagesumsatz+receiptTotal;
-    }
-
-
-
-    public void incCounter(){
-        counter++;
-    }
-    public int getCounter(){
-        return counter;
-    }
-
     public static void main(String[] args) throws IOException {
 
         Scanner scanner = new Scanner(System.in);
         Driver driver = new Driver();
         Shop shop = new Shop();
         List<ReceiptItem> aux = new ArrayList<>();
+        Path brands = Paths.get("output\\brands.csv");
+        if (Files.notExists(brands)) {
+            Files.createFile(brands);
+        }
         Path path = Paths.get("output\\items.txt");
         if (Files.notExists(path)) {
             Files.createFile(path);
@@ -71,7 +64,7 @@ public class Driver {
             int auswahl = scanner.nextInt();
             scanner.nextLine();
             switch (auswahl) {
-                case 1 -> shop.addItem(path, inputListFromFile);
+                case 1 -> shop.addItem(path,brands, inputListFromFile);
                 case 2 -> shop.displayItems(inputListFromFile);
                 case 3 -> {
                     driver.incCounter();
@@ -80,8 +73,6 @@ public class Driver {
                         aux.add(j, receiptItemListReturned.get(j));
                     }
                     driver.setListAllReceiptItemsDay(aux);// doesn't work
-
-
                     int numberOfItems = 0;
                     for (ReceiptItem item : receiptItemListReturned) {
                         numberOfItems += item.quantity;
@@ -103,6 +94,11 @@ public class Driver {
         }
     }
 
+    public String getNameShop(){
+        Shop shop = new Shop();
+
+        return shop.getShopname();
+    }
 
     public void accountingMenu() {
 
@@ -126,6 +122,8 @@ public class Driver {
 
     }
 
+
+
     public static void csvConverter() throws IOException {
 
         List<String[]> csvData = createCsvDataSimple();
@@ -135,7 +133,6 @@ public class Driver {
         try (CSVWriter writer = new CSVWriter(new FileWriter("output\\test.csv"))) {
             writer.writeAll(csvData);
         }
-
     }
 
     private static List<String[]> createCsvDataSimple() {
@@ -161,6 +158,18 @@ public class Driver {
         System.out.println("---TAGESUMSATZLISTE ENDE---");
     }
 
+
+    public void incTagesumsatz(double receiptTotal){
+        tagesumsatz=tagesumsatz+receiptTotal;
+    }
+
+    public void incCounter(){
+        counter++;
+    }
+    public int getCounter(){
+        return counter;
+    }
+
     public double getTagesumsatz() {
         return tagesumsatz;
     }
@@ -175,7 +184,7 @@ public class Driver {
 
     // AUX
     private String convert() {
-        return ";";
+        return ",";
     }
 
     public void writeToFile(Path path) throws IOException {

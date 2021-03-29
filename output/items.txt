@@ -16,3 +16,7 @@ UZT;Samsung;Tablet Master;399.9;
 cvb;OSHO;Danger: Truth at Work;29.9;
 CVB;OSHO;Danger: Truth at work!;29.9;
 CVB;OSHO;Danger: Truth at work!;29.9;
+nbv;VOLVO (SE);AirCooler S3000;199.9;
+nbv;VOLVO (SE);AirCooler S3000;199.9;
+ASD;PORSCHE;GTI Klappe;399.0;
+ASD;PORSCHE;GTI Klappe;399.0;
