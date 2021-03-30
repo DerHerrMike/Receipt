@@ -34,7 +34,7 @@ public class Shop {
         Item item = new Item();
         int i = 0;
         while (i < item.defIterator()) {
-            Item insert = item.itemCreator(path, brands, itemPath,getItemsFromFile);
+            Item insert = item.itemCreator(path, brands, itemPath, getItemsFromFile);
             getItemsFromFile.add(insert);
             item.writeToFile(path);
             i++;
@@ -108,7 +108,7 @@ public class Shop {
             details4Accounting.add(String.valueOf(anzahl));
             scanner.nextLine();
             int skuPosition = iterationCounter;
-            ReceiptItem receiptItem = getRecieptItem(pathToReceiptItems,getItemsFromFile,anzahl,skuPosition);
+            ReceiptItem receiptItem = getRecieptItem(pathToReceiptItems, getItemsFromFile, anzahl, skuPosition);
             receiptItemList.add(receiptItem);
             System.out.println();
             System.out.println("Weiteres Produkt kaufen? (j/n): ");
@@ -127,8 +127,10 @@ public class Shop {
 
         String item = getItemsFromFile.get(skuPosition).getBrand() + ", " + getItemsFromFile.get(skuPosition).getName();
         double ppu = getItemsFromFile.get(skuPosition).getPpu();
+        double totalThisReceiptItem = ppu * anzahl;
         BigDecimal price = new BigDecimal(ppu);
-        writeReceiptItemstoFile(pathToReceiptItems,item,ppu,price);
+        BigDecimal totalThisReceiptI = new BigDecimal(totalThisReceiptItem);
+        writeReceiptItemstoFile(pathToReceiptItems, item, ppu, totalThisReceiptI);
         return new ReceiptItem(item, anzahl, price);
     }
 
@@ -139,23 +141,23 @@ public class Shop {
         return new Receipt(lcd, shopname, r.getNextValue());
     }
 
-    public void writeReceiptItemstoFile(Path pathToReceiptItems, String receiptItems, double ppu, BigDecimal price) throws IOException {
+    public void writeReceiptItemstoFile(Path pathToReceiptItems, String receiptItems, double ppu, BigDecimal total) throws IOException {
 
         if (Files.notExists(pathToReceiptItems)) {
             Files.createFile(pathToReceiptItems);
         }
         String ppu1 = String.valueOf(ppu);
-        String price1 = String.valueOf(price);
-        String entry =  receiptItems+","+ppu1 +","+price1+ "\n";
+        String price1 = String.valueOf(total);
+        String entry = receiptItems + "," + ppu1 + "," + price1 + "\n";
         Files.write(
                 pathToReceiptItems,
                 entry.getBytes(),
                 StandardOpenOption.APPEND);
     }
 
-    public double calculateAverageReceiptsValue(double furtherTotal){
+    public double calculateAverageReceiptsValue(double furtherTotal) {
 
-        return + furtherTotal;
+        return +furtherTotal;
     }
 
     public double getReceiptItemsTotal(List<ReceiptItem> listForReceipt) {
@@ -195,8 +197,6 @@ public class Shop {
     private String convert() {
         return ";";
     }
-
-
 
 
     // G&S

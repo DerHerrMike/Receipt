@@ -66,7 +66,7 @@ public class Driver {
                     Items verkaufen = 3
                     Buchhaltung aufrufen = 4
                     Programm beenden = 9
-                    Bitte Auswahl treffen: 
+                    Bitte Auswahl treffen:
                     """;
             System.out.println(output);
             int auswahl = scanner.nextInt();
@@ -76,10 +76,13 @@ public class Driver {
                 case 2 -> shop.displayItems(inputListFromFile);
                 case 3 -> {
                     List<ReceiptItem> receiptItemListReturned = shop.sellItems(inputListFromFile);
+
                     listAllReceiptItemsDay.addAll(receiptItemListReturned);
                     double total = shop.getReceiptItemsTotal(receiptItemListReturned);
+
                     double averageReVa = shop.calculateAverageReceiptsValue(total);
                     averageReceiptVaDayList.add(averageReVa);
+
                     tagesumsatz = driver.incTagesumsatz(tagesumsatz, total);
                     Receipt receipt = shop.createReceipt();
                     int receiptNumber = receipt.getReceiptNumber();
@@ -114,7 +117,7 @@ public class Driver {
                 StandardOpenOption.APPEND);
     }
 
-    public void accountingMenu(Shop shop, List<ReceiptItem> listAllReceiptItemsDay, int counter, double tagesumsatz, List<Double> averageReceiptVaList) {
+    public void accountingMenu(Shop shop, List<ReceiptItem> listAllReceiptItemsDay, int counter, double tagesumsatz, List<Double> averageReceiptVaDayList) {
         System.out.println();
         System.out.println("***********************************************");
         System.out.println("ABRECHNUNG der Firma " + shop.getShopname());
@@ -130,12 +133,18 @@ public class Driver {
         System.out.println("Der Tagesumsatz gesamt beträgt: EUR " + tagesumsatz);
         System.out.println();
         double allValues = 0.0f;
-        for(int i = 0; i< averageReceiptVaList.size();i++){;
-            allValues += averageReceiptVaList.get(i);
+        for (Double aDouble : averageReceiptVaDayList) {
+            allValues += aDouble;
         }
         double aux = Math.pow(10,2);
-        double average = Math.round((allValues/averageReceiptVaList.size())*aux)/aux;
+        double average = Math.round((allValues/averageReceiptVaDayList.size())*aux)/aux;
         System.out.println("Die durchschnittliche Rechnungssumme des Tages beträgt EUR: "+average);
+        System.out.println();
+        averageReceiptVaDayList.sort(null);
+        int listlastpos = (averageReceiptVaDayList.size()-1);
+        System.out.println("Die höchste Rechnung des Tages betrug EUR "+averageReceiptVaDayList.get(listlastpos));
+        System.out.println();
+        System.out.println("Die niedrigste Rechnung des Tages betrug EUR: "+averageReceiptVaDayList.get(0));
         System.out.println();
         System.out.println("---TAGESUMSATZLISTE ENDE---");
         System.out.println();
@@ -211,4 +220,44 @@ public class Driver {
         }
         return itemsExFile;
     }
+
+
+    public static List<Receipt> loadAllReceipts(Path path) throws IOException {     //TODO further files loading
+
+        BufferedReader reader;
+        List<Receipt> receiptsExFile = new ArrayList<>();
+
+        if (Files.size(path) < 1) {
+            System.out.println("Kein Eintrag in Datei!");
+            return null;
+        } else {
+
+            try {
+                reader = new BufferedReader(new FileReader(String.valueOf(path)));
+                String line = reader.readLine();
+                while (line != null) {
+                    String[] ausgeleseneZeile = line.split(",");
+                    //ShopName
+                    String shopNameF = ausgeleseneZeile[0];
+                    //ReceiptNo
+                    String receiptNoF = ausgeleseneZeile[1];
+                    //LDT
+                    String ldt = ausgeleseneZeile[2];
+
+                    LocalDateTime ldtConvert = LocalDateTime.parse(ldt);
+                    int receiptNoConvert = Integer.parseInt(receiptNoF);
+
+                    Receipt ReceiptObjectExFile = new Receipt(ldtConvert,shopNameF,receiptNoConvert);
+
+                    receiptsExFile.add(ReceiptObjectExFile);
+                    line = reader.readLine();
+                }
+                reader.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return receiptsExFile;
+    }
+
 }
