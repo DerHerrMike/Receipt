@@ -153,6 +153,11 @@ public class Shop {
                 StandardOpenOption.APPEND);
     }
 
+    public double calculateAverageReceiptsValue(double furtherTotal){
+
+        return + furtherTotal;
+    }
+
     public double getReceiptItemsTotal(List<ReceiptItem> listForReceipt) {
 
         double total = 0;
@@ -168,7 +173,7 @@ public class Shop {
     public void printReceipt(Receipt receipt, List<ReceiptItem> listOfItemsForReceipt, double total) {
 
         Scanner scanner = new Scanner(System.in);
-        String receiptConverter = receipt.stringify();
+        String receiptConverter = receipt.stringify(shopname);
         System.out.println(receiptConverter);
         System.out.println();
         for (ReceiptItem item : listOfItemsForReceipt) {

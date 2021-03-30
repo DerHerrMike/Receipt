@@ -23,6 +23,8 @@ public class Driver {
 
 
     public static void main(String[] args) throws IOException {
+
+        List<Double> averageReceiptVaDayList = new ArrayList<>();
         double tagesumsatz = 0;
         List<ReceiptItem> listAllReceiptItemsDay = new ArrayList<>();
         Driver driver = new Driver();
@@ -76,6 +78,8 @@ public class Driver {
                     List<ReceiptItem> receiptItemListReturned = shop.sellItems(inputListFromFile);
                     listAllReceiptItemsDay.addAll(receiptItemListReturned);
                     double total = shop.getReceiptItemsTotal(receiptItemListReturned);
+                    double averageReVa = shop.calculateAverageReceiptsValue(total);
+                    averageReceiptVaDayList.add(averageReVa);
                     tagesumsatz = driver.incTagesumsatz(tagesumsatz, total);
                     Receipt receipt = shop.createReceipt();
                     int receiptNumber = receipt.getReceiptNumber();
@@ -86,7 +90,7 @@ public class Driver {
                     counter++;
                 }
 
-                case 4 -> driver.accountingMenu(shop, listAllReceiptItemsDay, counter, tagesumsatz);
+                case 4 -> driver.accountingMenu(shop, listAllReceiptItemsDay, counter, tagesumsatz,averageReceiptVaDayList);
                 case 5 -> System.out.println("Case 5");
                 case 9 -> {
                     System.out.println("Das Programm wird beendet!");
@@ -110,7 +114,7 @@ public class Driver {
                 StandardOpenOption.APPEND);
     }
 
-    public void accountingMenu(Shop shop, List<ReceiptItem> listAllReceiptItemsDay, int counter, double tagesumsatz) {
+    public void accountingMenu(Shop shop, List<ReceiptItem> listAllReceiptItemsDay, int counter, double tagesumsatz, List<Double> averageReceiptVaList) {
         System.out.println();
         System.out.println("***********************************************");
         System.out.println("ABRECHNUNG der Firma " + shop.getShopname());
@@ -125,9 +129,19 @@ public class Driver {
         System.out.println();
         System.out.println("Der Tagesumsatz gesamt beträgt: EUR " + tagesumsatz);
         System.out.println();
-        System.out.println("");
-        System.exit(0);
-
+        double allValues = 0.0f;
+        for(int i = 0; i< averageReceiptVaList.size();i++){;
+            allValues += averageReceiptVaList.get(i);
+        }
+        double aux = Math.pow(10,2);
+        double average = Math.round((allValues/averageReceiptVaList.size())*aux)/aux;
+        System.out.println("Die durchschnittliche Rechnungssumme des Tages beträgt EUR: "+average);
+        System.out.println();
+        System.out.println("---TAGESUMSATZLISTE ENDE---");
+        System.out.println();
+        System.out.println("Zurück zum Menü  mit beliebiger Taste");
+        Scanner scanner = new Scanner(System.in);
+        scanner.nextLine();
     }
 
     public void readoutItem(List<ReceiptItem> receiptItemListReturn) {
@@ -136,7 +150,6 @@ public class Driver {
             System.out.println(item.stringify());
             System.out.println();
         }
-        System.out.println("---TAGESUMSATZLISTE ENDE---");
     }
 
 

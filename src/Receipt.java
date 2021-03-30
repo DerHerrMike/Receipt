@@ -19,19 +19,17 @@ public class Receipt {
         this.receiptNumber = receiptNumber;
     }
 
-    // no-arg constructor
     public Receipt() {
     }
-
 
     public int getNextValue() {
         return receiptNumber + 1;
     }
 
-    public String stringify() {
-        Shop shop = new Shop();
+    public String stringify(String shop) {
+
         String lineEnding = System.getProperty("line.separator");
-        return lineEnding + shop.getShopname() + " - Ihr Partner im Handwerk!" +
+        return lineEnding + shop + " - Ihr Partner im Handwerk!" +
                 lineEnding + "Einkauf am/um: " + getTimestamp() +
                 lineEnding +
                 "Rechnungsnummer " + getNextValue() + ", UID Nr. GB8904321";
