@@ -108,8 +108,10 @@ public class Shop {
             details4Accounting.add(String.valueOf(anzahl));
             scanner.nextLine();
             int skuPosition = iterationCounter;
-            ReceiptItem receiptItem = getRecieptItem(pathToReceiptItems, getItemsFromFile, anzahl, skuPosition);
+
+            ReceiptItem receiptItem = getReceiptItem(pathToReceiptItems,getItemsFromFile,anzahl,skuPosition);
             receiptItemList.add(receiptItem);
+
             System.out.println();
             System.out.println("Weiteres Produkt kaufen? (j/n): ");
             String furtherItems = scanner.nextLine();
@@ -123,15 +125,17 @@ public class Shop {
         return receiptItemList;
     }
 
-    private ReceiptItem getRecieptItem(Path pathToReceiptItems, List<Item> getItemsFromFile, int anzahl, int skuPosition) throws IOException {
+    private ReceiptItem getReceiptItem(Path pathToReceiptItems,List<Item> getItemsFromFile, int anzahl, int skuPosition) throws IOException {
 
         String item = getItemsFromFile.get(skuPosition).getBrand() + ", " + getItemsFromFile.get(skuPosition).getName();
         double ppu = getItemsFromFile.get(skuPosition).getPpu();
-        double totalThisReceiptItem = ppu * anzahl;
-        BigDecimal price = new BigDecimal(ppu);
-        BigDecimal totalThisReceiptI = new BigDecimal(totalThisReceiptItem);
-        writeReceiptItemstoFile(pathToReceiptItems, item, ppu, totalThisReceiptI);
-        return new ReceiptItem(item, anzahl, price);
+        double grossThisReceiptItem = ppu * anzahl;
+        BigDecimal bigDecimalPPU = new BigDecimal(ppu);
+        BigDecimal bigDecGrossThisRecItem = new BigDecimal(grossThisReceiptItem);
+        //Price PPU not changed to gross
+
+        writeReceiptItemstoFile(pathToReceiptItems,item,bigDecimalPPU,bigDecGrossThisRecItem);
+        return new ReceiptItem(item, anzahl, bigDecimalPPU);
     }
 
     public Receipt createReceipt() throws IOException {
@@ -141,15 +145,15 @@ public class Shop {
         return new Receipt(lcd, shopname, r.getNextValue());
     }
 
-    public void writeReceiptItemstoFile(Path pathToReceiptItems, String receiptItems, double ppu, BigDecimal total) throws IOException {
+    public void writeReceiptItemstoFile(Path pathToReceiptItems, String receiptItems, BigDecimal ppu, BigDecimal total) throws IOException {
 
         if (Files.notExists(pathToReceiptItems)) {
             Files.createFile(pathToReceiptItems);
         }
         String ppu1 = String.valueOf(ppu);
-        String price1 = String.valueOf(total);
-        String entry = receiptItems + "," + ppu1 + "," + price1 + "\n";
-        Files.write(
+        String totalConvert = String.valueOf(total);
+        String entry = receiptItems + "," + ppu1 + "," + totalConvert + "\n";
+        Files. write(
                 pathToReceiptItems,
                 entry.getBytes(),
                 StandardOpenOption.APPEND);

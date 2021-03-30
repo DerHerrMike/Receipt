@@ -13,6 +13,9 @@ public class ReceiptItem {
         this.price = price.setScale(2, RoundingMode.HALF_UP );
     }
 
+    public BigDecimal getPrice() {
+        return price;
+    }
 
     public String stringify() {
 
@@ -33,4 +36,6 @@ public class ReceiptItem {
     public int getQuantity() {
         return quantity;
     }
+
+
 }

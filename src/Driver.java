@@ -2,6 +2,7 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -76,15 +77,18 @@ public class Driver {
                 case 2 -> shop.displayItems(inputListFromFile);
                 case 3 -> {
                     List<ReceiptItem> receiptItemListReturned = shop.sellItems(inputListFromFile);
+                    double total = shop.getReceiptItemsTotal(receiptItemListReturned);
 
                     listAllReceiptItemsDay.addAll(receiptItemListReturned);
-                    double total = shop.getReceiptItemsTotal(receiptItemListReturned);
+
 
                     double averageReVa = shop.calculateAverageReceiptsValue(total);
                     averageReceiptVaDayList.add(averageReVa);
 
                     tagesumsatz = driver.incTagesumsatz(tagesumsatz, total);
+
                     Receipt receipt = shop.createReceipt();
+
                     int receiptNumber = receipt.getReceiptNumber();
                     String shopName = receipt.getShopname();
                     String lcd = receipt.getTimestamp();
@@ -142,7 +146,7 @@ public class Driver {
         System.out.println();
         averageReceiptVaDayList.sort(null);
         int listlastpos = (averageReceiptVaDayList.size()-1);
-        System.out.println("Die höchste Rechnung des Tages betrug EUR "+averageReceiptVaDayList.get(listlastpos));
+        System.out.println("Die höchste Rechnung des Tages betrug EUR: "+averageReceiptVaDayList.get(listlastpos));
         System.out.println();
         System.out.println("Die niedrigste Rechnung des Tages betrug EUR: "+averageReceiptVaDayList.get(0));
         System.out.println();
@@ -220,9 +224,9 @@ public class Driver {
         }
         return itemsExFile;
     }
+//TODO further files loading
 
-
-    public static List<Receipt> loadAllReceipts(Path path) throws IOException {     //TODO further files loading
+    public static List<Receipt> loadAllReceipts(Path path) throws IOException {
 
         BufferedReader reader;
         List<Receipt> receiptsExFile = new ArrayList<>();
@@ -258,6 +262,48 @@ public class Driver {
             }
         }
         return receiptsExFile;
+    }
+
+    public static List<ReceiptItem> loadAllReceiptsItems(Path path) throws IOException {
+
+        BufferedReader reader;
+        List<ReceiptItem> receiptItemsExFile = new ArrayList<>();
+
+        if (Files.size(path) < 1) {
+            System.out.println("Kein Eintrag in Datei!");
+            return null;
+        } else {
+
+            try {
+                reader = new BufferedReader(new FileReader(String.valueOf(path)));
+                String line = reader.readLine();
+                while (line != null) {
+                    String[] ausgeleseneZeile = line.split(",");
+                    //Brand
+                    String brandF = ausgeleseneZeile[0];
+                    //Item
+                    String itemF = ausgeleseneZeile[1];
+                    String brandItem = brandF + " "+ itemF;
+                    //ppu
+                    double ppu = Double.parseDouble(ausgeleseneZeile[2]);
+                    BigDecimal ppuBigDecimal = new BigDecimal(ppu);
+                    //Gross
+                    String gross = ausgeleseneZeile[3];
+                    int grossF = Integer.parseInt(gross);
+                    //Quantity
+                    int quantity = (int) (grossF/ppu);
+
+                    ReceiptItem ReceiptItemObjectExFile = new ReceiptItem(brandItem, quantity, ppuBigDecimal);
+
+                    receiptItemsExFile.add(ReceiptItemObjectExFile);
+                    line = reader.readLine();
+                }
+                reader.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return receiptItemsExFile;
     }
 
 }
