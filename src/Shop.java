@@ -28,7 +28,6 @@ public class Shop {
 
         Scanner scanner = new Scanner(System.in);
         List<ReceiptItem> receiptItemList = new ArrayList<>();
-        List<String> details4Accounting = new ArrayList<>();
         Path pathToReceiptItems = Paths.get("output\\receiptItems.csv");
 
         System.out.println();
@@ -54,14 +53,11 @@ public class Shop {
                 String compareSKU = getItemsFromFile.get(iterationCounter).getSku();
                 if (!compareSKU.equalsIgnoreCase(selectedSKU)) {
                     iterationCounter++;
-                } else {
-                    details4Accounting.add(selectedSKU);
                 }
             }
             System.out.println();
             System.out.println("Bitte gewünschte Anzahl eingeben: ");
             int anzahl = scanner.nextInt();
-            details4Accounting.add(String.valueOf(anzahl)); //TODO here I have sku and quantity in String List details4accounting
             scanner.nextLine();
 
             int skuPosition = iterationCounter;
@@ -82,33 +78,7 @@ public class Shop {
         return receiptItemList;
     }
 
-//    private ReceiptItem createOneReceiptItem(Path pathToReceiptItems, List<Item> getItemsFromFile, int anzahl, int skuPosition) throws IOException {
-//
-//        String item = getItemsFromFile.get(skuPosition).getBrand() + ", " + getItemsFromFile.get(skuPosition).getName();
-//        double ppu = getItemsFromFile.get(skuPosition).getPpu();
-//        double grossThisReceiptItem = ppu * anzahl;
-//        BigDecimal bigDecimalPPU = new BigDecimal(ppu);
-//        BigDecimal bigDecGrossThisRecItem = new BigDecimal(grossThisReceiptItem); //Price PPU not changed to gross
-//
-//        writeOneReceiptItemtoFile(pathToReceiptItems, item, bigDecimalPPU, anzahl, bigDecGrossThisRecItem);
-//        return new ReceiptItem(item, anzahl, bigDecimalPPU);
-//    }
-//
-//
-//    public void writeOneReceiptItemtoFile(Path pathToReceiptItems, String oneReceiptItem, BigDecimal ppu, int anzahl, BigDecimal bigDecGrossThisRecItem) throws IOException {
-//
-//        if (Files.notExists(pathToReceiptItems)) {
-//            Files.createFile(pathToReceiptItems);
-//        }
-//        String ppu1 = String.valueOf(ppu);
-//        String grossConvert = String.valueOf(bigDecGrossThisRecItem);//TODO  total or gross?
-//        String anzahl1 = String.valueOf(anzahl);
-//        String entry = oneReceiptItem + "," + ppu1 + "," + anzahl1 + "," + grossConvert + "\n";       // receiptItem = ITEM+BRAND
-//        Files.write(
-//                pathToReceiptItems,
-//                entry.getBytes(),
-//                StandardOpenOption.APPEND);
-//    }
+
 
     // G&S
     public String getShopname() {

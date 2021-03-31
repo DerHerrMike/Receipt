@@ -82,7 +82,7 @@ public class Driver {
                 case 1 -> item.addItem(path, brands, items,inputListFromFile);
                 case 2 -> item.displayItems(inputListFromFile);
                 case 3 -> {
-                    //SHOP.java
+
                     List<ReceiptItem> receiptItemListReturned = shop.sellItems(inputListFromFile,rI);
                     listAllReceiptItemsDay.addAll(receiptItemListReturned);
 

@@ -5,7 +5,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
 import java.util.List;
-import java.util.Scanner;
 
 public class ReceiptItem {
 
@@ -73,20 +72,11 @@ public class ReceiptItem {
                 "Gesamtbetrag Produkt: " + price.toString() + lineEnding;
     }
 
-    public BigDecimal getPrice() {
-        return price;
-    }
-
     // TODO check price vs. gross
     public double getGross() {
 
         price =  price.multiply(BigDecimal.valueOf(quantity));
         return price.doubleValue();
     }
-
-    public int getQuantity() {
-        return quantity;
-    }
-
 
 }

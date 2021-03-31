@@ -1,7 +1,3 @@
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.StandardOpenOption;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -28,7 +24,7 @@ public class Receipt {
         return receiptNumber + 1;
     }
 
-    public Receipt createReceipt() throws IOException {
+    public Receipt createReceipt() {
 
         Receipt r = new Receipt();
         LocalDateTime lcd = LocalDateTime.now();
@@ -71,23 +67,6 @@ public class Receipt {
     }   //TODO receiptnumber or value wrong
 
 
-    public void writeToFile(Path path) throws IOException {
-
-        String object = convert();
-
-        if (Files.notExists(path)) {
-            Files.createFile(path);
-        }
-
-        Files.write(
-                path,
-                object.getBytes(),
-                StandardOpenOption.APPEND);
-    }
-
-    private String convert() {
-        return ",";
-    }
 
     public String getTimestamp() {
         var format = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss");
