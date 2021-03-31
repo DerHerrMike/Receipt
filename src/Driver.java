@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-public class Driver implements Loading {
+public class Driver  {
 
 
 
@@ -36,7 +36,7 @@ public class Driver implements Loading {
         if (Files.notExists(brands)) {
             Files.createFile(brands);
         }
-        List<Item> listWithLoadedItemsAvailable = Loading.loadAllItems(); //filled with all data from file to show availabe items;
+        List<Item> listWithLoadedItemsAvailable = LoadData.loadAllItems(); //filled with all data from file to show availabe items;
 
         Shop shop = new Shop();
         Item item = new Item();
