@@ -46,9 +46,12 @@ public class Driver {
         if (Files.notExists(brands)) {
             Files.createFile(brands);
         }
-        List<Item> inputListFromFile = new ArrayList<>(Objects.requireNonNull(readAllLines(path)));
+        List<Item> inputListFromFile = new ArrayList<>(Objects.requireNonNull(readAllLines(path))); //filled with all data from file to show availabe items
 
         Shop shop = new Shop();
+        Item item = new Item();
+        Receipt receipt = new Receipt();
+        ReceiptItem rI = new ReceiptItem();
         shop.designNameSelection();
         shop.chooseName();
         System.out.println();
@@ -61,39 +64,41 @@ public class Driver {
             System.out.println("WILLKOMMEN BEI " + shop.getShopname() + " - Tools4Pros");
             String output = """
                                         
-                    --------------------------------------
-                    Items ins Lager hinzufügen = 1
-                    Items in Lager auflisten = 2
-                    Items verkaufen = 3
-                    Buchhaltung aufrufen = 4
-                    Programm beenden = 9
-                    Bitte Auswahl treffen:
+                    -----------------------------------------
+                    |                                       | 
+                    |    Items ins Lager hinzufügen = 1     |    
+                    |    Items in Lager auflisten = 2       |
+                    |    Items verkaufen = 3                |
+                    |    Buchhaltung aufrufen = 4           |
+                    |    Programm beenden = 9               |
+                    |                                       |
+                    |    Bitte Auswahl treffen:             |
+                    -----------------------------------------
                     """;
             System.out.println(output);
             int auswahl = scanner.nextInt();
             scanner.nextLine();
             switch (auswahl) {
-                case 1 -> shop.addItem(path, brands, items,inputListFromFile);
-                case 2 -> shop.displayItems(inputListFromFile);
+                case 1 -> item.addItem(path, brands, items,inputListFromFile);
+                case 2 -> item.displayItems(inputListFromFile);
                 case 3 -> {
-                    List<ReceiptItem> receiptItemListReturned = shop.sellItems(inputListFromFile);
-                    double total = shop.getReceiptItemsTotal(receiptItemListReturned);
-
+                    //SHOP.java
+                    List<ReceiptItem> receiptItemListReturned = shop.sellItems(inputListFromFile,rI);
                     listAllReceiptItemsDay.addAll(receiptItemListReturned);
 
-
-                    double averageReVa = shop.calculateAverageReceiptsValue(total);
+                    double total = rI.getReceiptItemsTotal(receiptItemListReturned);
+                    double averageReVa = receipt.calculateAverageReceiptsValue(total);
                     averageReceiptVaDayList.add(averageReVa);
 
                     tagesumsatz = driver.incTagesumsatz(tagesumsatz, total);
 
-                    Receipt receipt = shop.createReceipt();
+                    Receipt newReceipt = receipt.createReceipt();
 
-                    int receiptNumber = receipt.getReceiptNumber();
-                    String shopName = receipt.getShopname();
-                    String lcd = receipt.getTimestamp();
+                    int receiptNumber = newReceipt.getReceiptNumber();
+                    String shopName = newReceipt.getShopname();
+                    String lcd = newReceipt.getTimestamp();
                     writeReceiptsToFile(receiptsToFile,receiptNumber,shopName,lcd);
-                    shop.printReceipt(receipt, receiptItemListReturned, total);
+                    receipt.printReceipt(newReceipt, receiptItemListReturned, total);
                     counter++;
                 }
 

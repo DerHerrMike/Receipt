@@ -23,8 +23,6 @@ public class Item {
     public Item() {
 
     }
-
-
     public int defIterator() {
 
         Scanner scanner = new Scanner(System.in);
@@ -33,6 +31,24 @@ public class Item {
         int units = scanner.nextInt();
         scanner.nextLine();
         return units;
+    }
+
+    public void addItem(Path path, Path brands, Path itemPath, List<Item> getItemsFromFile) throws IOException {
+
+        Item item = new Item();
+        int i = 0;
+        while (i < item.defIterator()) {
+            Item insert = item.itemCreator(path, brands, itemPath, getItemsFromFile);
+            getItemsFromFile.add(insert);
+            item.writeToFile(path);
+            i++;
+        }
+        System.out.println("Alle Items hinzugefügt und in Datei geschrieben!");
+        System.out.println();
+        System.out.println();
+        System.out.println("Zurück zum Menü mit beliebiger Taste!");
+        Scanner scanner = new Scanner(System.in);
+        scanner.nextLine();
     }
 
     public Item itemCreator(Path path, Path pathToBrands, Path pathToItem, List<Item> itemsList) throws IOException {
@@ -57,6 +73,28 @@ public class Item {
         writeToFile(path);
         System.out.println();
         return item;
+    }
+
+    public void displayItems(List<Item> getItemsFromFile) {
+
+        System.out.println("--------------------------------");
+        System.out.println();
+        System.out.println("Items auf Lager: ");
+        System.out.println();
+
+        for (Item item : getItemsFromFile) {
+            System.out.print("SKU: " + item.getSku() + " || ");
+            System.out.print("Brand: " + item.getBrand() + " || ");
+            System.out.print("Name: " + item.getName() + " || ");
+            System.out.println("Stückpreis EUR: " + item.getPpu());
+            System.out.println();
+        }
+        System.out.println("Alle Items auf Lager ausgegeben.");
+        System.out.println();
+        System.out.println();
+        System.out.println("Zurück zum Menü mit beliebiger Taste!");
+        Scanner scanner = new Scanner(System.in);
+        scanner.nextLine();
     }
 
 

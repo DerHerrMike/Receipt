@@ -4,6 +4,8 @@ import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
+import java.util.Scanner;
 
 
 public class Receipt {
@@ -26,6 +28,39 @@ public class Receipt {
         return receiptNumber + 1;
     }
 
+    public Receipt createReceipt() throws IOException {
+
+        Receipt r = new Receipt();
+        LocalDateTime lcd = LocalDateTime.now();
+        return new Receipt(lcd, shopname, r.getNextValue());
+    }//TODO receiptnumber check
+
+
+    public void printReceipt(Receipt receipt, List<ReceiptItem> listOfItemsForReceipt, double total) {
+
+        Scanner scanner = new Scanner(System.in);
+        String receiptConverter = receipt.stringify(shopname);
+        System.out.println(receiptConverter);
+        System.out.println();
+        for (ReceiptItem item : listOfItemsForReceipt) {
+
+            String returnForSringify = item.stringify();
+            System.out.println(returnForSringify);
+        }
+        System.out.println("______________________________");
+        System.out.println("______________________________" + System.getProperty("line.separator") +
+                "Total inkl. USt.: " + Math.round(total * 100.0) / 100.0 + " EUR.");
+        System.out.println();
+        System.out.println();
+        System.out.println("Zurück zum Menü mit beliebiger Taste!");
+        scanner.nextLine();
+    }
+
+    public double calculateAverageReceiptsValue(double furtherTotal) {
+
+        return +furtherTotal;
+    }
+
     public String stringify(String shop) {
 
         String lineEnding = System.getProperty("line.separator");
@@ -33,7 +68,8 @@ public class Receipt {
                 lineEnding + "Einkauf am/um: " + getTimestamp() +
                 lineEnding +
                 "Rechnungsnummer " + getNextValue() + ", UID Nr. GB8904321";
-    }
+    }   //TODO receiptnumber or value wrong
+
 
     public void writeToFile(Path path) throws IOException {
 
