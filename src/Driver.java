@@ -87,7 +87,7 @@ public class Driver {
                     double averageReVa = receipt.calculateAverageReceiptsValue(total);
                     averageReceiptVaDayList.add(averageReVa);
                     tagesumsatz = accounting.incTagesumsatz(tagesumsatz, total);
-                    Receipt newReceipt = receipt.createReceipt();
+                    Receipt newReceipt = receipt.createReceipt(receipt);
                     int receiptNumber = newReceipt.getReceiptNumber();
                     String shopName = newReceipt.getShopname();
                     String lcd = newReceipt.getTimestamp();

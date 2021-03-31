@@ -21,21 +21,20 @@ public class Receipt {
     }
 
     public int getNextValue() {
-        return receiptNumber + 1;
+        return (getReceiptNumber() + 1);
     }
 
-    public Receipt createReceipt() {
+    public Receipt createReceipt(Receipt newReceipt) {
 
-        Receipt r = new Receipt();
         LocalDateTime lcd = LocalDateTime.now();
-        return new Receipt(lcd, shopname, r.getNextValue());
-    }//TODO receiptnumber check
+        return new Receipt(lcd, shopname, newReceipt.getNextValue());
+    }
 
 
     public void printReceipt(Shop shop, Receipt receipt, List<ReceiptItem> listOfItemsForReceipt, double total) {
 
         Scanner scanner = new Scanner(System.in);
-        String receiptConverter = receipt.stringify(shop.getShopname());
+        String receiptConverter = receipt.stringify(shop.getShopname(), shop);
         System.out.println(receiptConverter);
         System.out.println();
         for (ReceiptItem item : listOfItemsForReceipt) {
@@ -57,16 +56,15 @@ public class Receipt {
         return +furtherTotal;
     }
 
-    public String stringify(String shop) {
+    public String stringify(String shop, Shop shop2t) {
 
+        int recNo = shop2t.getPurchaseCounter();
         String lineEnding = System.getProperty("line.separator");
         return lineEnding + shop + " - Ihr Partner im Handwerk!" +
                 lineEnding + "Einkauf am/um: " + getTimestamp() +
                 lineEnding +
-                "Rechnungsnummer " + getNextValue() + ", UID Nr. GB8904321";
-    }   //TODO receiptnumber or value wrong
-
-
+                "Rechnungsnummer " + recNo + ", UID Nr. GB8904321";
+    }
 
     public String getTimestamp() {
         var format = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss");
