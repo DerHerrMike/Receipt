@@ -19,24 +19,24 @@ public class Driver  {
         List<Double> averageReceiptVaDayList = new ArrayList<>();
         List<ReceiptItem> listAllReceiptItemsDay = new ArrayList<>();
         double tagesumsatz = 0;
-        Path path = Paths.get("output\\items.txt");
-        if (Files.notExists(path)) {
-            Files.createFile(path);
+        Path pathItemsToTXT = Paths.get("output\\items.txt");
+        if (Files.notExists(pathItemsToTXT)) {
+            Files.createFile(pathItemsToTXT);
         }
-        Path items = Paths.get("output\\items.csv");
-        if (Files.notExists(items)) {
-            Files.createFile(items);
+        Path pathItemsToCSV = Paths.get("output\\items.csv");
+        if (Files.notExists(pathItemsToCSV)) {
+            Files.createFile(pathItemsToCSV);
         }
-        Path brands = Paths.get("output\\brands.csv");
-        if (Files.notExists(brands)) {
-            Files.createFile(brands);
+        Path pathBrandsToCSV = Paths.get("output\\brands.csv");
+        if (Files.notExists(pathBrandsToCSV)) {
+            Files.createFile(pathBrandsToCSV);
         }
-        Path receiptsToFile = Paths.get("output\\receipts.csv");
-        if (Files.notExists(brands)) {
-            Files.createFile(brands);
+        Path pathReceiptsToCSV = Paths.get("output\\receipts.csv");
+        if (Files.notExists(pathBrandsToCSV)) {
+            Files.createFile(pathBrandsToCSV);
         }
 
-        List<Item> listWithLoadedItemsAvailable = LoadData.loadAllItems(path); //filled with all data from file to show availabe items;
+        List<Item> listWithLoadedItemsAvailable = LoadData.loadAllItems(pathItemsToTXT); //filled with all data from file to show availabe items;
 
         Shop shop = new Shop();
         Item item = new Item();
@@ -69,7 +69,7 @@ public class Driver  {
             int auswahl = scanner.nextInt();
             scanner.nextLine();
             switch (auswahl) {
-                case 1 -> item.addItem(path, brands, items,listWithLoadedItemsAvailable);
+                case 1 -> item.addItem(pathItemsToTXT, pathBrandsToCSV, pathItemsToCSV,listWithLoadedItemsAvailable);
                 case 2 -> {
                     assert listWithLoadedItemsAvailable != null;
                     item.displayItems(listWithLoadedItemsAvailable);
@@ -91,7 +91,7 @@ public class Driver  {
                     int receiptNumber = newReceipt.getReceiptNumber();
                     String shopName = newReceipt.getShopname();
                     String lcd = newReceipt.getTimestamp();
-                    writeReceiptsToFile(receiptsToFile,receiptNumber,shopName,lcd);
+                    writeReceiptsToFile(pathReceiptsToCSV,receiptNumber,shopName,lcd);
                     receipt.printReceipt(newReceipt, receiptItemListReturned, total);
                     counter++;
                 }

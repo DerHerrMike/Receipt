@@ -23,17 +23,8 @@ public class Item {
     public Item() {
 
     }
-    public int defIterator() {
 
-        Scanner scanner = new Scanner(System.in);
-        System.out.println();
-        System.out.println("Wie viele Items wollen Sie hinzufügen: ");
-        int units = scanner.nextInt();
-        scanner.nextLine();
-        return units;
-    }
-
-    public void addItem(Path path, Path brands, Path itemPath, List<Item> getItemsFromFile) throws IOException {
+    public void addItem(Path itemToTXT, Path brandsToCSV, Path itemToCSV, List<Item> getItemsFromFile) throws IOException {
 
         Scanner scanner = new Scanner(System.in);
         System.out.println();
@@ -43,9 +34,9 @@ public class Item {
         Item item = new Item();
         int i = 0;
         while (i < units) {
-            Item insert = item.itemCreator(path, brands, itemPath);
+            Item insert = item.itemCreator(itemToTXT, brandsToCSV, itemToCSV);
             getItemsFromFile.add(insert);
-            item.writeToFile(path); //THIS is to .txt file
+            item.writeToTXTFile(itemToTXT); //THIS is to .txt file
             i++;
         }
         System.out.println("Alle Items hinzugefügt und in Datei geschrieben!");
@@ -64,16 +55,16 @@ public class Item {
         setSku(scanner.nextLine());
         System.out.println("Brand: ");
         setBrand(scanner.nextLine());
-        writeBrandsToFile(pathToBrands, brand);
+        writeBrandsToCSVFile(pathToBrands, brand); // THIS is to .csv file
         System.out.println("Name:");
         setName(scanner.nextLine());
-        writeItemsToFile(pathToItem, name);     // THIS is to .csv file
+        writeItemsToCSVFile(pathToItem, name);     // THIS is to .csv file
         System.out.println("Price per Unit: ");
         setPpu(scanner.nextDouble());
         System.out.println("Alle Daten zu diesem Item erfasst!");
         System.out.println();
         Item item = new Item(getSku(), getBrand(), getName(), getPpu());
-        writeToFile(path);  // This is for CSV
+//        writeToTXTFile(path);  // This is for TXT
         System.out.println();
         return item;
     }
@@ -100,7 +91,7 @@ public class Item {
         scanner.nextLine();
     }
 
-    /* This is to TXT file */ public void writeToFile(Path path) throws IOException {
+    public void writeToTXTFile(Path path) throws IOException {
 
         String object = convert();
 
@@ -114,7 +105,8 @@ public class Item {
                 StandardOpenOption.APPEND);
     }
 
-    /* AUX for writeToFile */ private String convert() {
+    /* AUX for writeToTXTFile */
+    private String convert() {
         return getSku() +
                 "," + getBrand()
                 +
@@ -125,7 +117,8 @@ public class Item {
                 "\n";
     }
 
-    /* THIS IS FOR CSV */  public void writeItemsToFile(Path pathToItem, String item) throws IOException {
+    /* THIS IS FOR CSV */
+    public void writeItemsToCSVFile(Path pathToItem, String item) throws IOException {
 
         if (Files.notExists(pathToItem)) {
             Files.createFile(pathToItem);
@@ -137,7 +130,7 @@ public class Item {
                 StandardOpenOption.APPEND);
     }
 
-    public void writeBrandsToFile(Path pathToBrand, String brand) throws IOException {
+    public void writeBrandsToCSVFile(Path pathToBrand, String brand) throws IOException {
 
         if (Files.notExists(pathToBrand)) {
             Files.createFile(pathToBrand);
@@ -148,7 +141,6 @@ public class Item {
                 entry.getBytes(),
                 StandardOpenOption.APPEND);
     }
-
 
 
     // G& S
