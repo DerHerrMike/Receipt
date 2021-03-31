@@ -15,9 +15,10 @@ public interface Loading {
 
     static List<Item> loadAllItems() throws IOException {
 
-        BufferedReader reader;
+        BufferedReader reader = null;
         List<Item> itemsExFile = new ArrayList<>();
         Path path = Paths.get("output\\items.txt");
+        String[] ausgeleseneZeile;
         if (Files.size(path) < 1) {
             System.out.println("Kein Eintrag in Datei!");
             return null;
@@ -25,10 +26,11 @@ public interface Loading {
             try {
                 reader = new BufferedReader(new FileReader(String.valueOf(path)));
                 String line = reader.readLine();
-                while (line != null) {
-                    String[] ausgeleseneZeile = line.split(",");
+                while (line != null && !line.isEmpty()) {
+                    ausgeleseneZeile = line.split(",");
                     //SKU
                     String skuF = ausgeleseneZeile[0];
+                    System.out.println(skuF);
                     //BRAND
                     String brandF = ausgeleseneZeile[1];
                     //NAME
@@ -39,9 +41,14 @@ public interface Loading {
                     itemsExFile.add(objectExFile);
                     line = reader.readLine();
                 }
-                reader.close();
+
             } catch (IOException e) {
                 e.printStackTrace();
+            }  finally {
+                if (reader != null) {
+                    reader.close();
+                }
+
             }
         }
         return itemsExFile;
