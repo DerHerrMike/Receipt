@@ -45,6 +45,20 @@
             </Attribute>
           </value>
         </entry>
+        <entry key="\src\LoadData.java">
+          <value>
+            <Attribute>
+              <option name="separator" value=";" />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="\src\Loading.java">
+          <value>
+            <Attribute>
+              <option name="separator" value=";" />
+            </Attribute>
+          </value>
+        </entry>
         <entry key="\src\ReceiptItem.java">
           <value>
             <Attribute>

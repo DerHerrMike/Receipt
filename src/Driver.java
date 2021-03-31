@@ -15,20 +15,19 @@ public class Driver  {
 
     public static void main(String[] args) throws IOException {
 
-        List<Double> averageReceiptVaDayList = new ArrayList<>();
-        double tagesumsatz = 0;
-        List<ReceiptItem> listAllReceiptItemsDay = new ArrayList<>();
         Driver driver = new Driver();
-        //   List<ReceiptItem> aux = new ArrayList<>();
-        Path brands = Paths.get("output\\brands.csv");
-        if (Files.notExists(brands)) {
-            Files.createFile(brands);
-        }
+        List<Double> averageReceiptVaDayList = new ArrayList<>();
+        List<ReceiptItem> listAllReceiptItemsDay = new ArrayList<>();
+        double tagesumsatz = 0;
         Path path = Paths.get("output\\items.txt");
         if (Files.notExists(path)) {
             Files.createFile(path);
         }
         Path items = Paths.get("output\\items.csv");
+        if (Files.notExists(items)) {
+            Files.createFile(items);
+        }
+        Path brands = Paths.get("output\\brands.csv");
         if (Files.notExists(brands)) {
             Files.createFile(brands);
         }
@@ -36,7 +35,8 @@ public class Driver  {
         if (Files.notExists(brands)) {
             Files.createFile(brands);
         }
-        List<Item> listWithLoadedItemsAvailable = LoadData.loadAllItems(); //filled with all data from file to show availabe items;
+
+        List<Item> listWithLoadedItemsAvailable = LoadData.loadAllItems(path); //filled with all data from file to show availabe items;
 
         Shop shop = new Shop();
         Item item = new Item();

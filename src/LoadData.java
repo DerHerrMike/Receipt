@@ -8,16 +8,15 @@ import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 public class LoadData {
 
 
-   public static List<Item> loadAllItems() throws IOException {
+    public static List<Item> loadAllItems(Path path) throws IOException {
 
         BufferedReader reader = null;
         List<Item> itemsExFile = new ArrayList<>();
-        Path path = Paths.get("output\\items.txt");
+
         String[] ausgeleseneZeile;
         if (Files.size(path) < 1) {
             System.out.println("Kein Eintrag in Datei!");
@@ -30,7 +29,6 @@ public class LoadData {
                     ausgeleseneZeile = line.split(",");
                     //SKU
                     String skuF = ausgeleseneZeile[0];
-                    System.out.println(skuF);
                     //BRAND
                     String brandF = ausgeleseneZeile[1];
                     //NAME
@@ -48,15 +46,14 @@ public class LoadData {
                 if (reader != null) {
                     reader.close();
                 }
-
             }
         }
         return itemsExFile;
-    }       //depends on readAllLines
+    }
 
-    static List<Receipt> loadAllReceipts(Path path) throws IOException {
+    public static List<Receipt> loadAllReceipts(Path path) throws IOException {
 
-        BufferedReader reader;
+        BufferedReader readerReceipts = null;
         List<Receipt> receiptsExFile = new ArrayList<>();
 
         if (Files.size(path) < 1) {
@@ -65,9 +62,9 @@ public class LoadData {
         } else {
 
             try {
-                reader = new BufferedReader(new FileReader(String.valueOf(path)));
-                String line = reader.readLine();
-                while (line != null) {
+                readerReceipts = new BufferedReader(new FileReader(String.valueOf(path)));
+                String line = readerReceipts.readLine();
+                while (line != null && !line.isEmpty()) {
                     String[] ausgeleseneZeile = line.split(",");
                     //ShopName
                     String shopNameF = ausgeleseneZeile[0];
@@ -82,19 +79,23 @@ public class LoadData {
                     Receipt ReceiptObjectExFile = new Receipt(ldtConvert, shopNameF, receiptNoConvert);
 
                     receiptsExFile.add(ReceiptObjectExFile);
-                    line = reader.readLine();
+                    line = readerReceipts.readLine();
                 }
-                reader.close();
+
             } catch (IOException e) {
                 e.printStackTrace();
+            } finally {
+                if (readerReceipts != null) {
+                    readerReceipts.close();
+                }
             }
         }
         return receiptsExFile;
     }
 
-    static List<ReceiptItem> loadAllReceiptsItems(Path path) throws IOException {
+    public static List<ReceiptItem> loadAllReceiptsItems(Path path) throws IOException {
 
-        BufferedReader reader;
+        BufferedReader readerReceiptItem = null;
         List<ReceiptItem> receiptItemsExFile = new ArrayList<>();
 
         if (Files.size(path) < 1) {
@@ -103,8 +104,8 @@ public class LoadData {
         } else {
 
             try {
-                reader = new BufferedReader(new FileReader(String.valueOf(path)));
-                String line = reader.readLine();
+                readerReceiptItem = new BufferedReader(new FileReader(String.valueOf(path)));
+                String line = readerReceiptItem.readLine();
                 while (line != null) {
                     String[] ausgeleseneZeile = line.split(",");
                     //Brand
@@ -124,11 +125,15 @@ public class LoadData {
                     ReceiptItem ReceiptItemObjectExFile = new ReceiptItem(brandItem, quantity, ppuBigDecimal);
 
                     receiptItemsExFile.add(ReceiptItemObjectExFile);
-                    line = reader.readLine();
+                    line = readerReceiptItem.readLine();
                 }
-                reader.close();
+
             } catch (IOException e) {
                 e.printStackTrace();
+            } finally {
+                if (readerReceiptItem != null) {
+                    readerReceiptItem.close();
+                }
             }
         }
         return receiptItemsExFile;

@@ -8,4 +8,4 @@ TZU,APPLE,iMac,2002.0
 JKU,Echad,Enlightenment Now,100.0
 IKL,LernTech,Neuro Enhancer,29.9
 CVB,OSHO,Danger: Truth at work!,29.9
-
+FGH,LENOVO,ThinkPad i5,1299.9
