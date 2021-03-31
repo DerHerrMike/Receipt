@@ -133,7 +133,6 @@ public class Item {
                 getName() +
                 "," +
                 getPpu() +
-                "," +
                 "\n";
     }
 

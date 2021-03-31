@@ -1,24 +1,14 @@
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.FileWriter;
+
 import java.io.IOException;
-import java.math.BigDecimal;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.Scanner;
 
-import com.opencsv.CSVWriter;
-
-
-//TODO String.format
-
-public class Driver {
+public class Driver implements Loading {
 
 
 
@@ -46,7 +36,7 @@ public class Driver {
         if (Files.notExists(brands)) {
             Files.createFile(brands);
         }
-        List<Item> inputListFromFile = new ArrayList<>(Objects.requireNonNull(readAllLines(path))); //filled with all data from file to show availabe items
+        List<Item> listWithLoadedItemsAvailable = Loading.loadAllItems(); //filled with all data from file to show availabe items;
 
         Shop shop = new Shop();
         Item item = new Item();
@@ -64,7 +54,7 @@ public class Driver {
             System.out.println("WILLKOMMEN BEI " + shop.getShopname() + " - Tools4Pros");
             String output = """
                                         
-                    -----------------------------------------
+                     ---------------------------------------
                     |                                       | 
                     |    Items ins Lager hinzufügen = 1     |    
                     |    Items in Lager auflisten = 2       |
@@ -73,17 +63,21 @@ public class Driver {
                     |    Programm beenden = 9               |
                     |                                       |
                     |    Bitte Auswahl treffen:             |
-                    -----------------------------------------
+                     ---------------------------------------
                     """;
             System.out.println(output);
             int auswahl = scanner.nextInt();
             scanner.nextLine();
             switch (auswahl) {
-                case 1 -> item.addItem(path, brands, items,inputListFromFile);
-                case 2 -> item.displayItems(inputListFromFile);
+                case 1 -> item.addItem(path, brands, items,listWithLoadedItemsAvailable);
+                case 2 -> {
+                    assert listWithLoadedItemsAvailable != null;
+                    item.displayItems(listWithLoadedItemsAvailable);
+                }
                 case 3 -> {
 
-                    List<ReceiptItem> receiptItemListReturned = shop.sellItems(inputListFromFile,rI);
+                    assert listWithLoadedItemsAvailable != null;
+                    List<ReceiptItem> receiptItemListReturned = shop.sellItems(listWithLoadedItemsAvailable,rI);
                     listAllReceiptItemsDay.addAll(receiptItemListReturned);
 
                     double total = rI.getReceiptItemsTotal(receiptItemListReturned);
@@ -170,145 +164,44 @@ public class Driver {
         }
     }
 
-
     public double incTagesumsatz(double tagesumsatz, double receiptTotal) {
         return  tagesumsatz + receiptTotal;
     }
 
+//    public static List<Item> readAllLines(Path path) throws IOException {
+//
+//        BufferedReader reader;
+//        List<Item> itemsExFile = new ArrayList<>();
+//
+//        if (Files.size(path) < 1) {
+//            System.out.println("Kein Eintrag in Datei!");
+//            return null;
+//        } else {
+//
+//            try {
+//                reader = new BufferedReader(new FileReader(String.valueOf(path)));
+//                String line = reader.readLine();
+//                while (line != null) {
+//                    String[] ausgeleseneZeile = line.split(",");
+//                    //SKU
+//                    String skuF = ausgeleseneZeile[0];
+//                    //BRAND
+//                    String brandF = ausgeleseneZeile[1];
+//                    //NAME
+//                    String nameF = ausgeleseneZeile[2];
+//                    //PPU
+//                    double ppuF = Double.parseDouble(ausgeleseneZeile[3]);
+//                    Item objectExFile = new Item(skuF, brandF, nameF, ppuF);
+//                    itemsExFile.add(objectExFile);
+//                    line = reader.readLine();
+//                }
+//                reader.close();
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//            }
+//        }
+//        return itemsExFile;
+//    }
 
-    // AUX
-    private String convert() {
-        return ",";
-    }
-
-    public void writeToFile(Path path) throws IOException {
-
-        String object = convert();
-
-        if (Files.notExists(path)) {
-            Files.createFile(path);
-        }
-
-        Files.write(
-                path,
-                object.getBytes(),
-                StandardOpenOption.APPEND);
-    }
-
-    public static List<Item> readAllLines(Path path) throws IOException {
-
-        BufferedReader reader;
-        List<Item> itemsExFile = new ArrayList<>();
-
-        if (Files.size(path) < 1) {
-            System.out.println("Kein Eintrag in Datei!");
-            return null;
-        } else {
-
-            try {
-                reader = new BufferedReader(new FileReader(String.valueOf(path)));
-                String line = reader.readLine();
-                while (line != null) {
-                    String[] ausgeleseneZeile = line.split(",");
-                    //SKU
-                    String skuF = ausgeleseneZeile[0];
-                    //BRAND
-                    String brandF = ausgeleseneZeile[1];
-                    //NAME
-                    String nameF = ausgeleseneZeile[2];
-                    //PPU
-                    double ppuF = Double.parseDouble(ausgeleseneZeile[3]);
-                    Item objectExFile = new Item(skuF, brandF, nameF, ppuF);
-                    itemsExFile.add(objectExFile);
-                    line = reader.readLine();
-                }
-                reader.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-        return itemsExFile;
-    }
-//TODO further files loading
-
-    public static List<Receipt> loadAllReceipts(Path path) throws IOException {
-
-        BufferedReader reader;
-        List<Receipt> receiptsExFile = new ArrayList<>();
-
-        if (Files.size(path) < 1) {
-            System.out.println("Kein Eintrag in Datei!");
-            return null;
-        } else {
-
-            try {
-                reader = new BufferedReader(new FileReader(String.valueOf(path)));
-                String line = reader.readLine();
-                while (line != null) {
-                    String[] ausgeleseneZeile = line.split(",");
-                    //ShopName
-                    String shopNameF = ausgeleseneZeile[0];
-                    //ReceiptNo
-                    String receiptNoF = ausgeleseneZeile[1];
-                    //LDT
-                    String ldt = ausgeleseneZeile[2];
-
-                    LocalDateTime ldtConvert = LocalDateTime.parse(ldt);
-                    int receiptNoConvert = Integer.parseInt(receiptNoF);
-
-                    Receipt ReceiptObjectExFile = new Receipt(ldtConvert,shopNameF,receiptNoConvert);
-
-                    receiptsExFile.add(ReceiptObjectExFile);
-                    line = reader.readLine();
-                }
-                reader.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-        return receiptsExFile;
-    }
-
-    public static List<ReceiptItem> loadAllReceiptsItems(Path path) throws IOException {
-
-        BufferedReader reader;
-        List<ReceiptItem> receiptItemsExFile = new ArrayList<>();
-
-        if (Files.size(path) < 1) {
-            System.out.println("Kein Eintrag in Datei!");
-            return null;
-        } else {
-
-            try {
-                reader = new BufferedReader(new FileReader(String.valueOf(path)));
-                String line = reader.readLine();
-                while (line != null) {
-                    String[] ausgeleseneZeile = line.split(",");
-                    //Brand
-                    String brandF = ausgeleseneZeile[0];
-                    //Item
-                    String itemF = ausgeleseneZeile[1];
-                    String brandItem = brandF + " "+ itemF;
-                    //ppu
-                    double ppu = Double.parseDouble(ausgeleseneZeile[2]);
-                    BigDecimal ppuBigDecimal = new BigDecimal(ppu);
-                    //Gross
-                    String gross = ausgeleseneZeile[3];
-                    int grossF = Integer.parseInt(gross);
-                    //Quantity
-                    int quantity = (int) (grossF/ppu);
-
-                    ReceiptItem ReceiptItemObjectExFile = new ReceiptItem(brandItem, quantity, ppuBigDecimal);
-
-                    receiptItemsExFile.add(ReceiptItemObjectExFile);
-                    line = reader.readLine();
-                }
-                reader.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-        return receiptItemsExFile;
-    }
 
 }
