@@ -32,10 +32,10 @@ public class Receipt {
     }//TODO receiptnumber check
 
 
-    public void printReceipt(Receipt receipt, List<ReceiptItem> listOfItemsForReceipt, double total) {
+    public void printReceipt(Shop shop, Receipt receipt, List<ReceiptItem> listOfItemsForReceipt, double total) {
 
         Scanner scanner = new Scanner(System.in);
-        String receiptConverter = receipt.stringify(shopname);
+        String receiptConverter = receipt.stringify(shop.getShopname());
         System.out.println(receiptConverter);
         System.out.println();
         for (ReceiptItem item : listOfItemsForReceipt) {

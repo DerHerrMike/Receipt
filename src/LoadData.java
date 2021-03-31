@@ -51,30 +51,32 @@ public class LoadData {
         return itemsExFile;
     }
 
+
     public static List<Receipt> loadAllReceipts(Path path) throws IOException {
 
         BufferedReader readerReceipts = null;
         List<Receipt> receiptsExFile = new ArrayList<>();
 
+        String[] ausgeleseneZeileReceipts;
         if (Files.size(path) < 1) {
             System.out.println("Kein Eintrag in Datei!");
             return null;
         } else {
-
             try {
                 readerReceipts = new BufferedReader(new FileReader(String.valueOf(path)));
                 String line = readerReceipts.readLine();
                 while (line != null && !line.isEmpty()) {
-                    String[] ausgeleseneZeile = line.split(",");
+                    ausgeleseneZeileReceipts = line.split(",");
                     //ShopName
-                    String shopNameF = ausgeleseneZeile[0];
+                    String shopNameF = ausgeleseneZeileReceipts[0];
                     //ReceiptNo
-                    String receiptNoF = ausgeleseneZeile[1];
+                    String receiptNoF = ausgeleseneZeileReceipts[1];
                     //LDT
-                    String ldt = ausgeleseneZeile[2];
+                    String ldt = ausgeleseneZeileReceipts[2];
 
-                    LocalDateTime ldtConvert = LocalDateTime.parse(ldt);
                     int receiptNoConvert = Integer.parseInt(receiptNoF);
+                    LocalDateTime ldtConvert = LocalDateTime.parse(ldt);
+
 
                     Receipt ReceiptObjectExFile = new Receipt(ldtConvert, shopNameF, receiptNoConvert);
 
