@@ -10,10 +10,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public interface Loading {
+public class LoadData {
 
 
-    static List<Item> loadAllItems() throws IOException {
+   public static List<Item> loadAllItems() throws IOException {
 
         BufferedReader reader = null;
         List<Item> itemsExFile = new ArrayList<>();
@@ -44,7 +44,7 @@ public interface Loading {
 
             } catch (IOException e) {
                 e.printStackTrace();
-            }  finally {
+            } finally {
                 if (reader != null) {
                     reader.close();
                 }
