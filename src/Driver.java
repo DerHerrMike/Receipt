@@ -53,24 +53,37 @@ public class Driver {
 
         while (true) {
             System.out.println();
-            System.out.println("WILLKOMMEN BEI " + shop.getShopname() + " - Tools4Pros");
-            String output = """
-                                        
-                     ---------------------------------------
-                    |                                       | 
-                    |    Items ins Lager hinzufügen = 1     |    
-                    |    Items in Lager auflisten = 2       |
-                    |    Items verkaufen = 3                |
-                    |    Buchhaltung aufrufen = 4           |
-                    |    Programm beenden = 9               |
-                    |                                       |
-                    |    Bitte Auswahl treffen!             |
-                    |                                       |
-                     ---------------------------------------
-                    """;
-            System.out.println(output);
-            int auswahl = scanner.nextInt();
-            scanner.nextLine();
+            int auswahl = 0;
+            boolean correctSelection = false;
+            while (!correctSelection) {
+
+                System.out.println("WILLKOMMEN BEI " + shop.getShopname() + " - Tools4Pros");
+                String output = """
+                                            
+                         ---------------------------------------
+                        |                                       | 
+                        |    Items ins Lager hinzufügen = 1     |    
+                        |    Items in Lager auflisten = 2       |
+                        |    Items verkaufen = 3                |
+                        |    Buchhaltung aufrufen = 4           |
+                        |    Programm beenden = 9               |
+                        |                                       |
+                        |    Bitte Auswahl treffen!             |
+                        |                                       |
+                         ---------------------------------------
+                        """;
+                System.out.println(output);
+                String selection = scanner.nextLine();
+                if (selection.equals("1") || selection.equals("2") || selection.equals("3") || selection.equals("4") || selection.equals("5") || selection.equals("9")) {
+                    auswahl = Integer.parseInt(selection);
+                    correctSelection = true;
+                } else {
+                    System.out.println("Ungültige Auswahl getroffen! Weiter mit beliebiger Taste!");
+                    scanner.nextLine();
+                    System.out.println();
+                }
+
+            }
             switch (auswahl) {
 
                 case 1 -> item.addItem(pathItemsToTXT, pathBrandsToCSV, pathItemsToCSV, listWithLoadedItemsAvailable);
@@ -92,11 +105,11 @@ public class Driver {
                     String shopName = newReceipt.getShopname();
                     String lcd = newReceipt.getTimestamp();
                     writeReceiptsToFile(pathReceiptsToCSV, receiptNumber, shopName, lcd);
-                    receipt.printReceipt(shop,newReceipt, receiptItemListReturned, total);
+                    receipt.printReceipt(shop, newReceipt, receiptItemListReturned, total, item);
                     counter++;
                 }
-                case 4 -> accounting.accountingMenu(shop, listAllReceiptItemsDay, counter, tagesumsatz, averageReceiptVaDayList);
-                case 5 -> System.out.println("Du hast das geheime Menü gefunden!");
+                case 4 -> accounting.accountingMenu(shop, listAllReceiptItemsDay, counter, tagesumsatz, averageReceiptVaDayList, item);
+                case 5 -> System.out.println("Du hast das geheime Menü gefunden! Code: X5C7");
                 case 9 -> {
                     System.out.println("Das Programm wird beendet!");
                     System.exit(0);

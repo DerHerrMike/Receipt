@@ -5,7 +5,7 @@ import java.util.Scanner;
 public class Accounting {
 
 
-    public void accountingMenu(Shop shop, List<ReceiptItem> listAllReceiptItemsDay, int counter, double tagesumsatz, List<Double> averageReceiptVaDayList) {
+    public void accountingMenu(Shop shop, List<ReceiptItem> listAllReceiptItemsDay, int counter, double tagesumsatz, List<Double> averageReceiptVaDayList, Item item) {
         System.out.println();
         System.out.println("***********************************************");
         System.out.println("ABRECHNUNG der Firma " + shop.getShopname());
@@ -17,7 +17,6 @@ public class Accounting {
         System.out.println("Die Tagesabrechnung der verkauften Produkte und deren Anzahl :");
         System.out.println();
         readoutItem(listAllReceiptItemsDay);
-        System.out.println();
         System.out.println("Der Tagesumsatz gesamt beträgt: EUR " + tagesumsatz);
         System.out.println();
         double allValues = 0.0f;
@@ -44,7 +43,7 @@ public class Accounting {
     public void readoutItem(List<ReceiptItem> receiptItemListReturn) {
 
         for (ReceiptItem item : receiptItemListReturn) {
-            System.out.println(item.stringify());
+            System.out.println(item.stringifyReceiptItemsNoArgs());
             System.out.println();
         }
     }

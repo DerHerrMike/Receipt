@@ -20,6 +20,7 @@ public class ReceiptItem {
 
     public ReceiptItem() {
     }
+    //TODO: price per unit correction in stringify
 
     public ReceiptItem createOneReceiptItem(Path pathToReceiptItems, List<Item> getItemsFromFile, int anzahl, int skuPosition) throws IOException {
 
@@ -62,14 +63,37 @@ public class ReceiptItem {
     }
 
 
-    public String stringify() {
+
+    public String stringifyReceiptItemsNoArgs() {
+
+
+        String lineEnding = System.getProperty("line.separator");
+        BigDecimal priceperUnit = getPrice();
+        double pricePerUnit = Double.parseDouble(String.valueOf(priceperUnit));
+        return "Produkt: " + item + lineEnding +
+                "Stück: " + quantity + lineEnding +
+                "Preis pro Stück: " + (pricePerUnit/quantity) + lineEnding +
+                "------------------------------" + lineEnding +
+                "Gesamtbetrag Produkt: " + getPrice() + lineEnding;
+    }
+
+//    public String stringify() {
+//        return "Produkt: " + getItem() + System.getProperty("line.separator") +
+//                "Stück: " + getQuantity() + System.getProperty("line.separator") +
+//                "Preis pro Stück: " + getPrice() + System.getProperty("line.separator") +
+//                "------------------------------" + System.getProperty("line.separator") +
+//                "Gesamtbetrag Produkt: " + Math.round(getGross() * 100.0) / 100.0 + System.getProperty("line.separator");
+//    }
+
+    public String stringifyReceiptItems(Item forString) {
+
 
         String lineEnding = System.getProperty("line.separator");
         return "Produkt: " + item + lineEnding +
                 "Stück: " + quantity + lineEnding +
-                "Preis pro Stück: " + price + lineEnding +
+                "Preis pro Stück: " + forString.getSku() + lineEnding +
                 "------------------------------" + lineEnding +
-                "Gesamtbetrag Produkt: " + price.toString() + lineEnding;
+                "Gesamtbetrag Produkt: " + getPrice() + lineEnding;
     }
 
     // TODO check price vs. gross
@@ -79,4 +103,7 @@ public class ReceiptItem {
         return price.doubleValue();
     }
 
+    public BigDecimal getPrice() {
+        return price;
+    }
 }

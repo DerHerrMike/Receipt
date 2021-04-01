@@ -28,9 +28,24 @@ public class Item {
 
         Scanner scanner = new Scanner(System.in);
         System.out.println();
-        System.out.println("Wie viele Items wollen Sie hinzufügen: ");
-        int units = scanner.nextInt();
-        scanner.nextLine();
+        int units;
+
+        while (true) {
+
+            System.out.println("Wie viele Items wollen Sie hinzufügen: ");
+            String selection = scanner.nextLine();
+            try {
+                units = Integer.parseInt(selection);
+
+                break;
+
+            } catch (NumberFormatException e) {
+                System.out.println();
+                System.out.println("Bitte einen ganzzahligen Wert eingeben! Weiter mit beliebiger Taste.");
+                scanner.nextLine();
+            }
+        }
+
         Item item = new Item();
         int i = 0;
         while (i < units) {
