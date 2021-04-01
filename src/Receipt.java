@@ -42,11 +42,7 @@ public class Receipt {
 
             System.out.println(listOfItemsForReceipt.get(i).stringifyReceiptItemsNoArgs());
         }
-//        for (ReceiptItem item : listOfItemsForReceipt) {
-//
-//            String returnForSringify = item.stringifyReceiptItems(forreceipt);
-//            System.out.println(returnForSringify);
-//        }
+
         System.out.println("______________________________");
         System.out.println("______________________________" + System.getProperty("line.separator") +
                 "Total inkl. USt.: " + Math.round(total * 100.0) / 100.0 + " EUR.");

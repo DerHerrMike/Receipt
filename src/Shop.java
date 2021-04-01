@@ -42,23 +42,45 @@ public class Shop {
             System.out.println("Stückpreis EUR: " + item.getPpu());
             System.out.println();
         }
-
+        boolean userSele = false;
         boolean abbruch = false;
         while (!abbruch) {
-
-            System.out.println("Welches Produkt möchtest du kaufen? Bitte SKU eingeben: ");
-            String selectedSKU = scanner.nextLine();
             int iterationCounter = 0;
-            for (int i = 0; i < getItemsFromFile.size(); i++) {//gets SKUs
-                String compareSKU = getItemsFromFile.get(iterationCounter).getSku();
-                if (!compareSKU.equalsIgnoreCase(selectedSKU)) {
-                    iterationCounter++;
+            while (!userSele) {
+
+                System.out.println("Welches Produkt möchtest du kaufen? Bitte SKU eingeben: ");
+                String selectedSKU = scanner.nextLine();
+                iterationCounter = 0;
+                for (int i = 0; i < getItemsFromFile.size(); i++) {//gets SKUs
+                    String compareSKU = getItemsFromFile.get(iterationCounter).getSku();
+                    if (!compareSKU.equalsIgnoreCase(selectedSKU)) {
+                        iterationCounter++;
+                    }else {
+                        userSele = true;
+                    }
+                        if (getItemsFromFile.size() <= iterationCounter) {
+                            System.out.println("Kein Produkt mit dieser SKU gefunden! Weiter mit beliebiger Taste.");
+                            System.out.println();
+                            scanner.nextLine();
+                        }
                 }
             }
             System.out.println();
-            System.out.println("Bitte gewünschte Anzahl eingeben: ");
-            int anzahl = scanner.nextInt();
-            scanner.nextLine();
+            int anzahl;
+            while (true) {
+
+                System.out.println("Bitte gewünschte Anzahl eingeben: ");
+                String selection = scanner.nextLine();
+                try {
+                    anzahl = Integer.parseInt(selection);
+                    break;
+
+                } catch (NumberFormatException e) {
+                    System.out.println();
+                    System.out.println("Bitte einen ganzzahligen Wert eingeben! Weiter mit beliebiger Taste.");
+                    scanner.nextLine();
+                }
+            }
 
             int skuPosition = iterationCounter;
             ReceiptItem receiptItem = rI.createOneReceiptItem(pathToReceiptItems, getItemsFromFile, anzahl, skuPosition);

@@ -56,7 +56,6 @@ public class Item {
         }
         System.out.println("Alle Items hinzugefügt und in Datei geschrieben!");
         System.out.println();
-        System.out.println();
         System.out.println("Zurück zum Menü mit beliebiger Taste!");
         scanner.nextLine();
     }

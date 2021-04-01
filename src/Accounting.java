@@ -51,6 +51,4 @@ public class Accounting {
     public double incTagesumsatz(double tagesumsatz, double receiptTotal) {
         return tagesumsatz + receiptTotal;
     }
-
-
 }
