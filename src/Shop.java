@@ -15,13 +15,37 @@ public class Shop {
         System.out.println("PROGRAMM ZU EIN- UND VERKAUF EINES KLEINEN UNTERNEHMENS");
         System.out.println("*******************************************************");
         System.out.println();
-        System.out.println("Bitte zu Beginn den Firmennamen festlegen: ");
+        System.out.println("Bitte zu Beginn den Firmennamen aus Auswahl oder selbst festlegen: ");
     }
 
     public void chooseName() {
 
         Scanner scanner = new Scanner(System.in);
-        setShopname(scanner.nextLine());
+        System.out.println();
+        System.out.println("Firma 'Steh und Schau GmbH' = 1");
+        System.out.println("Firma 'MPS Tools (EUROPE) Ltd.' = 2");
+        System.out.println("Firma 'GURU SHOP 24' = 3");
+        System.out.println("Eigenen Namen festlegen = 4");
+        System.out.println();
+        System.out.println("Bitte Auswahl treffen: ");
+        System.out.println();
+        int nameselection = scanner.nextInt();
+        scanner.nextLine();
+        switch (nameselection) {
+
+            case 1 ->setShopname("Steh und Schau GmbH");
+            case 2 ->setShopname("MPS Tools (EUROPE) Ltd.");
+            case 3-> setShopname("GURU SHOP 24");
+            case 4 -> {
+
+                System.out.println("Bitte Firmennamen eingeben: ");
+                String chosenName = scanner.nextLine();
+                setShopname(chosenName);
+                System.out.println(chosenName);
+            }
+
+            default -> throw new IllegalStateException("Unexpected value: " + nameselection);
+        }
     }
 
     public List<ReceiptItem> sellItems(List<Item> getItemsFromFile, ReceiptItem rI) throws IOException {
