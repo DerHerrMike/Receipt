@@ -38,9 +38,9 @@ public class Receipt {
         System.out.println(receiptConverter);
         System.out.println();
 
-        for (int i = 0; i<listOfItemsForReceipt.size();i++){
+        for (ReceiptItem item : listOfItemsForReceipt) {
 
-            System.out.println(listOfItemsForReceipt.get(i).stringifyReceiptItemsNoArgs());
+            System.out.println(item.stringifyReceiptItemsNoArgs());
         }
 
         System.out.println("______________________________");

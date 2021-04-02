@@ -3,6 +3,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
 import java.util.List;
+import java.util.Objects;
 import java.util.Scanner;
 
 public class Item {
@@ -59,6 +60,63 @@ public class Item {
         System.out.println("Zurück zum Menü mit beliebiger Taste!");
         scanner.nextLine();
     }
+
+
+    public List<Item> deleteItem(Path itemToTXT, Path brandsToCSV, Path itemToCSV, List<Item> listWithLoadedItemsAvailable) {
+
+        Scanner scanner = new Scanner(System.in);
+        System.out.println();
+        String itemToDelete = null;
+        int position = 0;
+        boolean userSelect = false;
+        while (!userSelect) {
+
+            System.out.println("Welches Item wollen Sie löschen? Bitte SKU eingeben: ");
+            itemToDelete = scanner.nextLine();
+            int iterationCounter = 0;
+            for (int i = 0; i < listWithLoadedItemsAvailable.size(); i++) {//gets SKUs
+                String compareSKU = listWithLoadedItemsAvailable.get(iterationCounter).getSku();
+                if (!compareSKU.equalsIgnoreCase(itemToDelete)) {
+                    iterationCounter++;
+                } else {
+                    userSelect = true;
+                }
+                if (listWithLoadedItemsAvailable.size() <= iterationCounter) {
+                    System.out.println("Kein Produkt mit dieser SKU gefunden! Zurück mit beliebiger Taste.");
+                    System.out.println();
+                    scanner.nextLine();
+                    userSelect = true;
+                }
+            }
+        }
+        for (int i = 0; i < listWithLoadedItemsAvailable.size(); i++) {
+            String search = listWithLoadedItemsAvailable.get(i).getSku();
+            if ((search.equalsIgnoreCase(itemToDelete))) {
+                System.out.println();
+                position = i;
+                break;
+            }
+        }
+        System.out.println("Item "+listWithLoadedItemsAvailable.get(position).getBrand()+" || "+listWithLoadedItemsAvailable.get(position).getName()+" wirklich löschen? Löschen mit 'j', zurück mit 'n'");
+        String confirmation = scanner.nextLine();
+        if(confirmation.equalsIgnoreCase("J")){
+            listWithLoadedItemsAvailable.remove(position);
+            System.out.println();
+            System.out.println("Item wurde gelöscht! Weiter mit beliebiger Taste:");
+            System.out.println("*******************************************");
+            scanner.nextLine();
+            System.out.println();
+        }else {
+            System.out.println("Kein Item gelöscht! Weiter mit beliebiger Taste:");
+            System.out.println("*******************************************");
+            scanner.nextLine();
+            System.out.println();
+            return listWithLoadedItemsAvailable;
+        }
+
+        return listWithLoadedItemsAvailable;
+    }
+
 
     public Item itemCreator(Path path, Path pathToBrands, Path pathToItem) throws IOException {
 
@@ -190,6 +248,4 @@ public class Item {
         this.ppu = ppu;
     }
 }
-
-
 

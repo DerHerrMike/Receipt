@@ -42,11 +42,11 @@ public class Shop {
             System.out.println("Stückpreis EUR: " + item.getPpu());
             System.out.println();
         }
-        boolean userSele = false;
+        boolean userSelect = false;
         boolean abbruch = false;
         while (!abbruch) {
             int iterationCounter = 0;
-            while (!userSele) {
+            while (!userSelect) {
 
                 System.out.println("Welches Produkt möchtest du kaufen? Bitte SKU eingeben: ");
                 String selectedSKU = scanner.nextLine();
@@ -55,14 +55,14 @@ public class Shop {
                     String compareSKU = getItemsFromFile.get(iterationCounter).getSku();
                     if (!compareSKU.equalsIgnoreCase(selectedSKU)) {
                         iterationCounter++;
-                    }else {
-                        userSele = true;
+                    } else {
+                        userSelect = true;
                     }
-                        if (getItemsFromFile.size() <= iterationCounter) {
-                            System.out.println("Kein Produkt mit dieser SKU gefunden! Weiter mit beliebiger Taste.");
-                            System.out.println();
-                            scanner.nextLine();
-                        }
+                    if (getItemsFromFile.size() <= iterationCounter) {
+                        System.out.println("Kein Produkt mit dieser SKU gefunden! Weiter mit beliebiger Taste.");
+                        System.out.println();
+                        scanner.nextLine();
+                    }
                 }
             }
             System.out.println();
@@ -81,26 +81,22 @@ public class Shop {
                     scanner.nextLine();
                 }
             }
-
             int skuPosition = iterationCounter;
             ReceiptItem receiptItem = rI.createOneReceiptItem(pathToReceiptItems, getItemsFromFile, anzahl, skuPosition);
-            //61 also calls writeOneReceiptItemtoFile
             receiptItemList.add(receiptItem);
-
             System.out.println();
             System.out.println("Weiteres Produkt kaufen? (j/n): ");
             String furtherItems = scanner.nextLine();
             if (furtherItems.equalsIgnoreCase("n")) {
                 int purchaseCount = (getPurchaseCounter() + 1);
                 setPurchaseCounter(purchaseCount);
+                System.out.println();
                 System.out.println("Dies war heute der " + getPurchaseCounter() + ". Einkauf.");
                 abbruch = true;
             }
         }
         return receiptItemList;
     }
-
-
 
     // G&S
     public String getShopname() {

@@ -15,12 +15,12 @@ public class ReceiptItem {
     public ReceiptItem(String item, int quantity, BigDecimal price) {
         this.item = item;
         this.quantity = quantity;
-        this.price = price.setScale(2, RoundingMode.HALF_UP );
+        this.price = price.setScale(2, RoundingMode.HALF_UP);
     }
 
     public ReceiptItem() {
     }
-    //TODO: price per unit correction in stringify
+
 
     public ReceiptItem createOneReceiptItem(Path pathToReceiptItems, List<Item> getItemsFromFile, int anzahl, int skuPosition) throws IOException {
 
@@ -50,7 +50,6 @@ public class ReceiptItem {
                 StandardOpenOption.APPEND);
     }
 
-    //TODO USAGE?
     public double getReceiptItemsTotal(List<ReceiptItem> listForReceipt) {
 
         double total = 0;
@@ -63,7 +62,6 @@ public class ReceiptItem {
     }
 
 
-
     public String stringifyReceiptItemsNoArgs() {
 
 
@@ -72,34 +70,14 @@ public class ReceiptItem {
         double pricePerUnit = Double.parseDouble(String.valueOf(priceperUnit));
         return "Produkt: " + item + lineEnding +
                 "Stück: " + quantity + lineEnding +
-                "Preis pro Stück: " + (pricePerUnit/quantity) + lineEnding +
+                "Preis pro Stück: " + (pricePerUnit / quantity) + lineEnding +
                 "------------------------------" + lineEnding +
                 "Gesamtbetrag Produkt: " + getPrice() + lineEnding;
     }
 
-//    public String stringify() {
-//        return "Produkt: " + getItem() + System.getProperty("line.separator") +
-//                "Stück: " + getQuantity() + System.getProperty("line.separator") +
-//                "Preis pro Stück: " + getPrice() + System.getProperty("line.separator") +
-//                "------------------------------" + System.getProperty("line.separator") +
-//                "Gesamtbetrag Produkt: " + Math.round(getGross() * 100.0) / 100.0 + System.getProperty("line.separator");
-//    }
-
-    public String stringifyReceiptItems(Item forString) {
-
-
-        String lineEnding = System.getProperty("line.separator");
-        return "Produkt: " + item + lineEnding +
-                "Stück: " + quantity + lineEnding +
-                "Preis pro Stück: " + forString.getSku() + lineEnding +
-                "------------------------------" + lineEnding +
-                "Gesamtbetrag Produkt: " + getPrice() + lineEnding;
-    }
-
-    // TODO check price vs. gross
     public double getGross() {
 
-        price =  price.multiply(BigDecimal.valueOf(quantity));
+        price = price.multiply(BigDecimal.valueOf(quantity));
         return price.doubleValue();
     }
 
