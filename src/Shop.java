@@ -41,7 +41,6 @@ public class Shop {
                 System.out.println("Bitte Firmennamen eingeben: ");
                 String chosenName = scanner.nextLine();
                 setShopname(chosenName);
-                System.out.println(chosenName);
             }
 
             default -> throw new IllegalStateException("Unexpected value: " + nameselection);

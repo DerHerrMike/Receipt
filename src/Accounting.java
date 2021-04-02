@@ -5,12 +5,14 @@ import java.util.Scanner;
 public class Accounting {
 
 
-    public void accountingMenu(Shop shop, List<ReceiptItem> listAllReceiptItemsDay, int counter, double tagesumsatz, List<Double> averageReceiptVaDayList, Item item) {
+    public boolean accountingMenu(Shop shop, List<ReceiptItem> listAllReceiptItemsDay, int counter, double tagesumsatz, List<Double> averageReceiptVaDayList, Item item) {
+
+        boolean purchasesToday;
+        Scanner scanner = new Scanner(System.in);
         System.out.println();
         System.out.println("***********************************************");
         System.out.println("ABRECHNUNG der Firma " + shop.getShopname());
         System.out.println("***********************************************");
-        System.out.println();
         System.out.println();
         System.out.println("Anzahl der heute getätigten Einkäufe: " + counter);
         System.out.println();
@@ -20,6 +22,11 @@ public class Accounting {
         System.out.println("Der Tagesumsatz gesamt beträgt: EUR " + tagesumsatz);
         System.out.println();
         double allValues = 0.0f;
+        if(averageReceiptVaDayList.size() == 0){
+            System.out.println("Es wurden 'heute' noch keine Umsätze getätigt. Zurück mit beliebiger Taste.");
+            scanner.nextLine();
+            return false;
+        }
         for (Double aDouble : averageReceiptVaDayList) {
             allValues += aDouble;
         }
@@ -36,8 +43,8 @@ public class Accounting {
         System.out.println("---TAGESUMSATZLISTE ENDE---");
         System.out.println();
         System.out.println("Zurück zum Menü  mit beliebiger Taste");
-        Scanner scanner = new Scanner(System.in);
         scanner.nextLine();
+        return true;
     }
 
     public void readoutItem(List<ReceiptItem> receiptItemListReturn) {

@@ -111,10 +111,10 @@ public class Driver {
                 }
                 case 4 -> accounting.accountingMenu(shop, listAllReceiptItemsDay, counter, tagesumsatz, averageReceiptVaDayList, item);
                 case 5 -> {
-                    System.out.println("Du hast das geheime Menü gefunden! Code: X5C7");
                     System.out.println();
                     listWithLoadedItemsAvailable=item.deleteItem(pathItemsToTXT,pathBrandsToCSV,pathItemsToCSV,listWithLoadedItemsAvailable);
                 }
+                case 7 -> System.out.println("Du hast das geheime Menü gefunden! Code: X5C7");
                 case 9 -> {
                     System.out.println("Das Programm wird beendet!");
                     System.exit(0);
